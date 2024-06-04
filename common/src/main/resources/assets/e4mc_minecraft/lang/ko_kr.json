@@ -1,0 +1,7 @@
+{
+  "text.e4mc_minecraft.domainAssigned": "로컬 게임을 도메인 [%s]에서 호스트합니다",
+  "text.e4mc_minecraft.closeServer": "로컬 게임이 더이상 공개되지 않습니다",
+  "text.e4mc_minecraft.serverAlreadyClosed": "로컬 게임이 이미 공개중이 아닙니다",
+  "text.e4mc_minecraft.clickToStop": " (멉추려면 여기를 클릭하세요)",
+  "text.e4mc_minecraft.error": "e4mc에서 오류가 발생했습니다."
+}

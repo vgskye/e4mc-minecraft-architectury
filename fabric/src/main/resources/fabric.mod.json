@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "e4mc_minecraft",
+  "version": "${version}",
+  "name": "e4mc",
+  "description": "Open a LAN server to anyone, anywhere, anytime.",
+  "authors": [
+    "skyevg"
+  ],
+  "contact": {
+    "homepage": "https://e4mc.link/",
+    "sources": "https://github.com/vgskye/e4mc-minecraft-architectury"
+  },
+  "license": "MIT",
+  "icon": "assets/e4mc_minecraft/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "link.e4mc.fabric.E4mcClientFabric"
+    ]
+  },
+  "mixins": [
+    "e4mc_minecraft.mixins.json",
+    "e4mc_minecraft-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.18"
+  }
+}

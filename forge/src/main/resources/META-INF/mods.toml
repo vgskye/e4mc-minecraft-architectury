@@ -1,0 +1,27 @@
+modLoader = "javafml"
+loaderVersion = "*"
+license = "MIT"
+
+[[mods]]
+modId = "e4mc_minecraft"
+version = "${version}"
+displayName = "e4mc"
+credits = "skyevg"
+authors = "skyevg"
+description = '''
+Open a LAN server to anyone, anywhere, anytime.
+'''
+
+[[dependencies.e4mc_minecraft]]
+modId = "forge"
+mandatory = true
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.e4mc_minecraft]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18,)"
+ordering = "NONE"
+side = "BOTH"

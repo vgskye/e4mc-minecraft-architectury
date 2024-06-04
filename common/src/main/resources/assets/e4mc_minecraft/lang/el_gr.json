@@ -1,0 +1,6 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Τοπικό παιχνίδι εξυπηρετήται στη διεύθηνση [%s]",
+    "text.e4mc_minecraft.closeServer": "Το τοπικό παιχνίδι δεν εξυπηρετήται δημόσια πλέον",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Το τοπικό παιχνίδι δεν εξυπηρετήται δημόσια",
+    "text.e4mc_minecraft.clickToStop": " (Πατήστε εδώ για απενεργοποίηση)"
+}

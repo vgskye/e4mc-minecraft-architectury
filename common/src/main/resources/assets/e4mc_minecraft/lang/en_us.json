@@ -1,0 +1,7 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Local game hosted on domain [%s]",
+    "text.e4mc_minecraft.closeServer": "Local game no longer publicly hosted",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Local game not publicly hosted",
+    "text.e4mc_minecraft.clickToStop": " (Click here to stop)",
+    "text.e4mc_minecraft.error": "An error occurred in e4mc"
+}
