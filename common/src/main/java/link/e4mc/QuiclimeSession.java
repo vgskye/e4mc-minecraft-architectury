@@ -236,11 +236,11 @@ public class QuiclimeSession {
         thread.start();
     }
 
-    public void start() {
-        try {
+    private static BrokerResponse getRelay() throws Exception {
+        if (Config.INSTANCE.useBroker.value()) {
             var httpClient = HttpClient.newHttpClient();
             var request = HttpRequest
-                    .newBuilder(new URI("https://broker.e4mc.link/getBestRelay"))
+                    .newBuilder(new URI(Config.INSTANCE.brokerUrl.value()))
                     .header("Accept", "application/json")
                     .build();
             LOGGER.info("req: {}", request);
@@ -249,7 +249,19 @@ public class QuiclimeSession {
             if (response.statusCode() != 200) {
                 throw new RuntimeException();
             }
-            var relayInfo = gson.fromJson(response.body(), BrokerResponse.class);
+            return gson.fromJson(response.body(), BrokerResponse.class);
+        } else {
+            var resp = new BrokerResponse();
+            resp.id = "custom";
+            resp.host = Config.INSTANCE.relayHost.value();
+            resp.port = Config.INSTANCE.relayPort.value();
+            return resp;
+        }
+    }
+
+    public void start() {
+        try {
+            var relayInfo = getRelay();
             LOGGER.info("using relay {}", relayInfo.id);
             QuicSslContext context = QuicSslContextBuilder
                     .forClient()

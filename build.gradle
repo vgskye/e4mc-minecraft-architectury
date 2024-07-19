@@ -42,6 +42,7 @@ allprojects {
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
         maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.sleeping.town/' }
     }
 
     tasks.withType(JavaCompile) {
