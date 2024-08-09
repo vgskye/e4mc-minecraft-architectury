@@ -1,0 +1,7 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Локальна гра розміщена на домені [%s]",
+    "text.e4mc_minecraft.closeServer": "Локальна гра більше не є загальнодоступною",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Локальна гра не є загальнодоступною",
+    "text.e4mc_minecraft.clickToStop": " (Натисніть тут, щоб зупинити)",
+    "text.e4mc_minecraft.error": "Виникла помилка в e4mc"
+}
