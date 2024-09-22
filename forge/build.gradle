@@ -96,7 +96,6 @@ publishing {
 
 publishMods {
     file = remapJar.archiveFile
-    additionalFiles.from(sourcesJar.archiveFile)
     type = STABLE
     changelog = getLatestChangelog()
     modLoaders.add("forge")
@@ -118,6 +117,7 @@ publishMods {
     modrinth {
         accessToken = project.modrinthApiToken
         projectId = project.modrinthId
+        additionalFiles.from(sourcesJar.archiveFile)
         minecraftVersions.addAll(
                 "1.18", "1.18.1", "1.18.2",
                 "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
