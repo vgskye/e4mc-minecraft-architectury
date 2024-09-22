@@ -98,6 +98,7 @@ publishMods {
     file = remapJar.archiveFile
     additionalFiles.from(sourcesJar.archiveFile)
     type = STABLE
+    changelog = getLatestChangelog()
     modLoaders.add("forge")
 
     version = project.version + "-forge"
