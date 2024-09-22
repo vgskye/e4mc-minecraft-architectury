@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.modmuss50.mod-publish-plugin" version "0.3.0"
 }
 
 architectury {
@@ -68,7 +69,7 @@ components.java {
 
 publishing {
     publications {
-        mavenForge(MavenPublication) {
+        mavenNeoForge(MavenPublication) {
             artifactId = rootProject.archives_base_name + "-" + project.name
             from components.java
         }
@@ -77,5 +78,44 @@ publishing {
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
         // Add repositories to publish to here.
+        maven {
+            url "https://sg.storage.bunnycdn.com/skyeven"
+            credentials(HttpHeaderCredentials) {
+                name = "AccessKey"
+                value = property("skyevenToken")
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+}
+
+publishMods {
+    file = remapJar.archiveFile
+    additionalFiles.from(sourcesJar.archiveFile)
+    type = STABLE
+    modLoaders.add("neoforge")
+
+    version = project.version + "-neoforge"
+    displayName = "[NeoForge] $project.version"
+
+    // Uncomment your desired platform(s)
+    curseforge {
+        accessToken = project.curseforgeApiToken
+        projectId = project.curseforgeId
+        minecraftVersions.addAll(
+                "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6",
+                "1.21", "1.21.1"
+        )
+    }
+
+    modrinth {
+        accessToken = project.modrinthApiToken
+        projectId = project.modrinthId
+        minecraftVersions.addAll(
+                "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6",
+                "1.21", "1.21.1"
+        )
     }
 }

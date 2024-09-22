@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.modmuss50.mod-publish-plugin" version "0.3.0"
 }
 
 architectury {
@@ -72,5 +73,57 @@ publishing {
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
         // Add repositories to publish to here.
+        maven {
+            url "https://sg.storage.bunnycdn.com/skyeven"
+            credentials(HttpHeaderCredentials) {
+                name = "AccessKey"
+                value = property("skyevenToken")
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+}
+
+publishMods {
+    file = remapJar.archiveFile
+    additionalFiles.from(sourcesJar.archiveFile)
+    type = STABLE
+    modLoaders.add("fabric")
+    modLoaders.add("quilt")
+
+    version = project.version + "-fabric"
+    displayName = "[Fabric] $project.version"
+
+    // Uncomment your desired platform(s)
+    curseforge {
+        accessToken = project.curseforgeApiToken
+        projectId = project.curseforgeId
+        minecraftVersions.addAll(
+                "1.18", "1.18.1", "1.18.2",
+                "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
+                "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6",
+                "1.21", "1.21.1"
+        )
+
+        requires{
+            slug = "fabric-api"
+        }
+    }
+
+    modrinth {
+        accessToken = project.modrinthApiToken
+        projectId = project.modrinthId
+        minecraftVersions.addAll(
+                "1.18", "1.18.1", "1.18.2",
+                "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
+                "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6",
+                "1.21", "1.21.1"
+        )
+
+        requires{
+            slug = "fabric-api"
+        }
     }
 }
