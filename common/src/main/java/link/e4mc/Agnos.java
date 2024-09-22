@@ -14,4 +14,9 @@ public class Agnos {
     public static Path configDir() {
         return null;
     }
+
+    @ExpectPlatform
+    public static Path jarPath() {
+        return null;
+    }
 }

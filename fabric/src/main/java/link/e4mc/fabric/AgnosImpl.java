@@ -13,4 +13,8 @@ public class AgnosImpl {
     public static Path configDir() {
         return FabricLoader.getInstance().getConfigDir();
     }
+
+    public static Path jarPath() {
+        return FabricLoader.getInstance().getModContainer("e4mc_minecraft").get().getOrigin().getPaths().get(0);
+    }
 }

@@ -12,8 +12,11 @@ description = '''
 Open a LAN server to anyone, anywhere, anytime.
 '''
 
+[[mixins]]
+config = "e4mc_minecraft.mixins.json"
+
 [[dependencies.e4mc_minecraft]]
-modId = "forge"
+modId = "neoforge"
 mandatory = true
 versionRange = "*"
 ordering = "NONE"
@@ -22,6 +25,6 @@ side = "BOTH"
 [[dependencies.e4mc_minecraft]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18,1.21)"
+versionRange = "[1.18,)"
 ordering = "NONE"
 side = "BOTH"

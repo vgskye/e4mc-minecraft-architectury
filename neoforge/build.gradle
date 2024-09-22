@@ -4,13 +4,7 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    forge()
-}
-
-loom {
-    forge {
-        mixinConfig "e4mc_minecraft.mixins.json"
-    }
+    neoForge()
 }
 
 configurations {
@@ -18,14 +12,14 @@ configurations {
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentNeoForge.extendsFrom common
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 
     shadowCommon(implementation("com.github.vgskye.netty-incubator-codec-quic:netty-incubator-codec-classes-quic:${rootProject.quic_version}") {
         exclude(group: "io.netty")
@@ -37,6 +31,9 @@ processResources {
     inputs.property "version", project.version
 
     filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand "version": project.version
     }
 }
