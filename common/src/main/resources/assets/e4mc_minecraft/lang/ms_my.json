@@ -1,0 +1,7 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Permainan tempatan dianjurkan pada domain [%s]",
+    "text.e4mc_minecraft.closeServer": "Permainan tempatan tidak lagi dianjurkan secara terbuka",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Permainan tempatan tidak dianjurkan secara terbuka",
+    "text.e4mc_minecraft.clickToStop": " (Klik di sini untuk berhenti)",
+    "text.e4mc_minecraft.error": "Sebuah ralat telah berlaku dalam e4mc"
+}
