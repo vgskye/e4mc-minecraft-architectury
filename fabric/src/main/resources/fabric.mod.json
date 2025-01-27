@@ -26,4 +26,7 @@
     "fabric": "*",
     "minecraft": ">=1.18"
   }
+  "breaks": {
+    "raknetify"
+  }
 }
