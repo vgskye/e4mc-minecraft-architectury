@@ -23,7 +23,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    shadowCommon(implementation("com.github.vgskye.netty-incubator-codec-quic:netty-incubator-codec-classes-quic:${rootProject.quic_version}") {
+    shadowCommon(implementation("io.netty.incubator:netty-incubator-codec-classes-quic:${rootProject.quic_version}") {
         exclude(group: "io.netty")
     })
     include 'folk.sisby:kaleido-config:0.3.1+1.3.1'

@@ -42,8 +42,8 @@ allprojects {
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
         maven { url "https://maven.neoforged.net/releases/" }
-        maven { url 'https://jitpack.io' }
         maven { url 'https://repo.sleeping.town/' }
+        maven { url 'https://maven.is-quite.gay/' }
     }
 
     tasks.withType(JavaCompile) {
