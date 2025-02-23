@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.3.0
+
+- Added Malay and Malay (Jawi) translations (by  NuruddinPlays)
+- Added Spanish translation (by Biquaternions)
+- Fixed constant redownloads of natives
+
 ## 5.2.1
 
 - Removed accidentally added debug message
