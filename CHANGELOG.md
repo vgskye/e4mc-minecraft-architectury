@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.3.1
+
+- Now supports 1.21.5
+
 ## 5.3.0
 
 - Added Malay and Malay (Jawi) translations (by  NuruddinPlays)

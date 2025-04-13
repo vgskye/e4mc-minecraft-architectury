@@ -347,13 +347,13 @@ public class QuiclimeSession {
                                                     "text.e4mc_minecraft.domainAssigned",
                                                     Mirror.withStyle(Mirror.literal(domain), it ->
                                                     it
-                                                            .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, domain))
+                                                            .withClickEvent(Mirror.copyToClipboard(domain))
                                                             .withColor(ChatFormatting.GREEN)
-                                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Mirror.translatable("chat.copy.click"))))
+                                                            .withHoverEvent(Mirror.showText(Mirror.translatable("chat.copy.click"))))
                                             ),
                                                     Mirror.withStyle(Mirror.translatable("text.e4mc_minecraft.clickToStop"), it ->
                                                             it
-                                                                    .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/e4mc stop"))
+                                                                    .withClickEvent(Mirror.runCommand("/e4mc stop"))
                                                                     .withColor(ChatFormatting.GRAY)
                                                     )
                                             );

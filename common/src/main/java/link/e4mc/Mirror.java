@@ -1,7 +1,9 @@
 package link.e4mc;
 
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 
 import java.lang.reflect.Constructor;
@@ -56,6 +58,69 @@ public class Mirror {
             "method_10852",
             "m_7220_"
     };
+    private static final String[] RUNCOMMAND_CLASS_NAMES = {
+            "net.minecraft.text.ClickEvent$RunCommand", // yarn
+            "net.minecraft.network.chat.ClickEvent$RunCommand",
+            "net.minecraft.class_2558$class_10609"
+    };
+    private static final String[] COPYTOCLIPBOARD_CLASS_NAMES = {
+            "net.minecraft.text.ClickEvent$CopyToClipboard", // yarn
+            "net.minecraft.network.chat.ClickEvent$CopyToClipboard",
+            "net.minecraft.class_2558$class_10606"
+    };
+    private static final String[] SHOWTEXT_CLASS_NAMES = {
+            "net.minecraft.text.HoverEvent$ShowText", // yarn
+            "net.minecraft.network.chat.HoverEvent$ShowText",
+            "net.minecraft.class_2568$class_10613"
+    };
+
+    public static ClickEvent runCommand(String command) {
+        if (ClickEvent.class.isInterface()) {
+            for (String className : RUNCOMMAND_CLASS_NAMES) {
+                try {
+                    Class<?> clazz = Class.forName(className);
+                    Constructor<?> constructor = clazz.getConstructor(String.class);
+                    return (ClickEvent) constructor.newInstance(command);
+                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                         InvocationTargetException | ClassCastException ignored) {}
+            }
+        } else {
+            return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+        }
+        throw new RuntimeException("Could not locate any way to make a ClickEvent!");
+    }
+
+    public static ClickEvent copyToClipboard(String text) {
+        if (ClickEvent.class.isInterface()) {
+            for (String className : COPYTOCLIPBOARD_CLASS_NAMES) {
+                try {
+                    Class<?> clazz = Class.forName(className);
+                    Constructor<?> constructor = clazz.getConstructor(String.class);
+                    return (ClickEvent) constructor.newInstance(text);
+                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                         InvocationTargetException | ClassCastException ignored) {}
+            }
+        } else {
+            return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text);
+        }
+        throw new RuntimeException("Could not locate any way to make a ClickEvent!");
+    }
+
+    public static HoverEvent showText(Component text) {
+        if (HoverEvent.class.isInterface()) {
+            for (String className : SHOWTEXT_CLASS_NAMES) {
+                try {
+                    Class<?> clazz = Class.forName(className);
+                    Constructor<?> constructor = clazz.getConstructor(Component.class);
+                    return (HoverEvent) constructor.newInstance(text);
+                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                         InvocationTargetException | ClassCastException ignored) {}
+            }
+        } else {
+            return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+        }
+        throw new RuntimeException("Could not locate any way to make a ClickEvent!");
+    }
 
     public static Component withStyle(Component component, UnaryOperator<Style> operator) {
         Class<? extends Component> clazz = component.getClass();
