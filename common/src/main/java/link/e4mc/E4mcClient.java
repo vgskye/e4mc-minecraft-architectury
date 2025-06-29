@@ -17,6 +17,7 @@ public class E4mcClient {
     public static QuiclimeSession session;
     private static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
     public static void init() {
+        Config.INSTANCE.id(); // Touch to initialize for McQoy
 //        if (System.getProperty("os.name").startsWith("Windows")) {
 //            var path = Agnos.jarPath();
 //            var motwPath = path + ":Zone.Identifier";
