@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.4.0
+
+- Now supports 1.21.6
+- Now restores basic administration commands such as /ban and /whitelist for LAN servers.
+
 ## 5.3.1
 
 - Now supports 1.21.5
