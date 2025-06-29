@@ -13,4 +13,9 @@ public class Config extends ReflectiveConfig {
 
     public final TrackedValue<String> relayHost = this.value("test.e4mc.link");
     public final TrackedValue<Integer> relayPort = this.value(25575);
+
+    @Comment("Allows use of certain dedicated server commands such as /ban and /whitelist")
+    public final TrackedValue<Boolean> restoreDedicatedCommands = this.value(true);
+    @Comment("Whether to use whitelists on LAN worlds")
+    public final TrackedValue<Boolean> useWhiteList = this.value(false);
 }

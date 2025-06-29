@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.server.commands.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,7 @@ import java.nio.file.Path;
 public class E4mcClient {
     public static final String MOD_ID = "e4mc_minecraft";
     public static QuiclimeSession session;
-    private static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
+    public static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
     public static void init() {
         Config.INSTANCE.id(); // Touch to initialize for McQoy
 //        if (System.getProperty("os.name").startsWith("Windows")) {
@@ -28,6 +29,12 @@ public class E4mcClient {
 //        }
     }
     public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
+        if (Config.INSTANCE.restoreDedicatedCommands.value() && Agnos.isClient()) {
+            BanListCommands.register(dispatcher);
+            BanPlayerCommands.register(dispatcher);
+            PardonCommand.register(dispatcher);
+            WhitelistCommand.register(dispatcher);
+        }
         dispatcher.register(
                 Commands.literal("e4mc")
                         .requires(src -> {
