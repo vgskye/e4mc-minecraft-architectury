@@ -1,7 +1,10 @@
 package link.e4mc.mixin;
 
+import com.mojang.authlib.GameProfile;
 import link.e4mc.Config;
 import link.e4mc.E4mcClient;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserBanList;
 import net.minecraft.server.players.UserWhiteList;
@@ -10,8 +13,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
+import java.net.SocketAddress;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
@@ -20,6 +25,8 @@ public abstract class PlayerListMixin {
     @Shadow public abstract UserBanList getBans();
 
     @Shadow public abstract UserWhiteList getWhiteList();
+
+    @Shadow public abstract MinecraftServer getServer();
 
     @Inject(method = "/^<init>$/", at = @At("TAIL"))
     void injectListLoads(CallbackInfo ci) {
@@ -41,5 +48,12 @@ public abstract class PlayerListMixin {
     @Inject(method = "setUsingWhiteList", at = @At("TAIL"))
     public void injectSetUsingWhiteList(boolean bl, CallbackInfo ci) {
         Config.INSTANCE.useWhiteList.setValue(bl);
+    }
+
+    @Inject(method = "canPlayerLogin", at = @At("HEAD"), cancellable = true)
+    public void allowOwnerLogin(SocketAddress socketAddress, GameProfile gameProfile, CallbackInfoReturnable<Component> cir) {
+        if (this.getServer().isSingleplayerOwner(gameProfile)) {
+            cir.setReturnValue(null);
+        }
     }
 }
