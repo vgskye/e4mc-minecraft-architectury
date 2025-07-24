@@ -237,7 +237,19 @@ public class QuiclimeSession {
     }
 
     private static BrokerResponse getRelay() throws Exception {
+        String region = Config.INSTANCE.region.value();
+
+        if (!"auto".equalsIgnoreCase(region) && Config.INSTANCE.useBroker.value()) {
+            LOGGER.info("Manual region selection: {}", region);
+            var resp = new BrokerResponse();
+            resp.id = region;
+            resp.host = region + ".e4mc.link";
+            resp.port = Config.INSTANCE.relayPort.value();
+            return resp;
+        }
+
         if (Config.INSTANCE.useBroker.value()) {
+            LOGGER.info("Automatic region selection via broker");
             var httpClient = HttpClient.newHttpClient();
             var request = HttpRequest
                     .newBuilder(new URI(Config.INSTANCE.brokerUrl.value()))
@@ -247,10 +259,11 @@ public class QuiclimeSession {
             var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             LOGGER.info("resp: {}", response);
             if (response.statusCode() != 200) {
-                throw new RuntimeException();
+                throw new RuntimeException("Failed to get relay from broker: " + response.body());
             }
             return gson.fromJson(response.body(), BrokerResponse.class);
         } else {
+            LOGGER.info("Using custom relay (broker disabled)");
             var resp = new BrokerResponse();
             resp.id = "custom";
             resp.host = Config.INSTANCE.relayHost.value();
@@ -273,9 +286,9 @@ public class QuiclimeSession {
                     .initialMaxStreamsBidirectional(512)
                     .maxIdleTimeout(10, TimeUnit.SECONDS)
                     .initialMaxData(4611686018427387903L)
-                    .initialMaxStreamDataBidirectionalRemote(1250000)
-                    .initialMaxStreamDataBidirectionalLocal(1250000)
-                    .initialMaxStreamDataUnidirectional(1250000)
+                    .initialMaxStreamDataBidirectionalRemote(15000000)
+                    .initialMaxStreamDataBidirectionalLocal(15000000)
+                    .initialMaxStreamDataUnidirectional(15000000)
                     .build();
             new Bootstrap()
                     .group(group)

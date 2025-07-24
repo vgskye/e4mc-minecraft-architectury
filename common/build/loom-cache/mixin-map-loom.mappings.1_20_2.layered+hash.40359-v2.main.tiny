@@ -1,0 +1,7 @@
+v1	named	intermediary
+FIELD	link/e4mc/mixin/ConnectionMixin	Lio/netty/channel/Channel;	channel	field_11651
+METHOD	link/e4mc/mixin/PlayerListMixin	(Z)V	setUsingWhiteList	method_14557
+METHOD	link/e4mc/mixin/PlayerListMixin	()Lnet/minecraft/server/players/UserBanList;	getBans	method_14563
+METHOD	link/e4mc/mixin/PlayerListMixin	()Lnet/minecraft/server/players/UserWhiteList;	getWhiteList	method_14590
+METHOD	link/e4mc/mixin/PlayerListMixin	()Lnet/minecraft/server/MinecraftServer;	getServer	method_14561
+METHOD	link/e4mc/mixin/ServerConnectionListenerMixin	(Ljava/net/InetAddress;I)V	startTcpServerListener	method_14354

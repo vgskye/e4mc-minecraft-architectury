@@ -1,0 +1,7 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Локальный сервер размещен на домене [%s]",
+    "text.e4mc_minecraft.closeServer": "Локальный сервер больше не является общедоступным",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Локальный сервер не является общедоступным",
+    "text.e4mc_minecraft.clickToStop": " (Нажмите здесь, чтобы остановить)",
+    "text.e4mc_minecraft.error": "В e4mc произошла ошибка"
+}

@@ -11,6 +11,9 @@ public class Config extends ReflectiveConfig {
     public final TrackedValue<Boolean> useBroker = this.value(true);
     public final TrackedValue<String> brokerUrl = this.value("https://broker.e4mc.link/getBestRelay");
 
+    @Comment("The desired server region. Examples: 'us', 'eu', 'de', 'jp'. Set to 'auto' for automatic selection.")
+    public final TrackedValue<String> region = this.value("auto");
+
     public final TrackedValue<String> relayHost = this.value("test.e4mc.link");
     public final TrackedValue<Integer> relayPort = this.value(25575);
 

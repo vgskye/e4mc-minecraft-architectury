@@ -1,0 +1,54 @@
+{
+  "mappings": {
+    "link/e4mc/mixin/BanListCommandsMixin": {
+      "register": "Lnet/minecraft/class_3014;method_13014(Lcom/mojang/brigadier/CommandDispatcher;)V"
+    },
+    "link/e4mc/mixin/BanPlayerCommandsMixin": {
+      "register": "Lnet/minecraft/class_3016;method_13021(Lcom/mojang/brigadier/CommandDispatcher;)V"
+    },
+    "link/e4mc/mixin/ConnectionMixin": {
+      "isMemoryConnection": "Lnet/minecraft/class_2535;method_10756()Z"
+    },
+    "link/e4mc/mixin/PardonCommandMixin": {
+      "register": "Lnet/minecraft/class_3086;method_13472(Lcom/mojang/brigadier/CommandDispatcher;)V"
+    },
+    "link/e4mc/mixin/PlayerListMixin": {
+      "canPlayerLogin": "Lnet/minecraft/class_3324;method_14586(Ljava/net/SocketAddress;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/class_2561;",
+      "setUsingWhiteList": "Lnet/minecraft/class_3324;method_14557(Z)V"
+    },
+    "link/e4mc/mixin/ServerConnectionListenerMixin": {
+      "startTcpServerListener": "Lnet/minecraft/class_3242;method_14354(Ljava/net/InetAddress;I)V",
+      "stop": "Lnet/minecraft/class_3242;method_14356()V"
+    },
+    "link/e4mc/mixin/WhitelistCommandMixin": {
+      "register": "Lnet/minecraft/class_3156;method_13836(Lcom/mojang/brigadier/CommandDispatcher;)V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "link/e4mc/mixin/BanListCommandsMixin": {
+        "register": "Lnet/minecraft/class_3014;method_13014(Lcom/mojang/brigadier/CommandDispatcher;)V"
+      },
+      "link/e4mc/mixin/BanPlayerCommandsMixin": {
+        "register": "Lnet/minecraft/class_3016;method_13021(Lcom/mojang/brigadier/CommandDispatcher;)V"
+      },
+      "link/e4mc/mixin/ConnectionMixin": {
+        "isMemoryConnection": "Lnet/minecraft/class_2535;method_10756()Z"
+      },
+      "link/e4mc/mixin/PardonCommandMixin": {
+        "register": "Lnet/minecraft/class_3086;method_13472(Lcom/mojang/brigadier/CommandDispatcher;)V"
+      },
+      "link/e4mc/mixin/PlayerListMixin": {
+        "canPlayerLogin": "Lnet/minecraft/class_3324;method_14586(Ljava/net/SocketAddress;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/class_2561;",
+        "setUsingWhiteList": "Lnet/minecraft/class_3324;method_14557(Z)V"
+      },
+      "link/e4mc/mixin/ServerConnectionListenerMixin": {
+        "startTcpServerListener": "Lnet/minecraft/class_3242;method_14354(Ljava/net/InetAddress;I)V",
+        "stop": "Lnet/minecraft/class_3242;method_14356()V"
+      },
+      "link/e4mc/mixin/WhitelistCommandMixin": {
+        "register": "Lnet/minecraft/class_3156;method_13836(Lcom/mojang/brigadier/CommandDispatcher;)V"
+      }
+    }
+  }
+}

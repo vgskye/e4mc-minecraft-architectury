@@ -1,0 +1,6 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Kohalik mäng on üles seatud domeenil [%s]",
+    "text.e4mc_minecraft.closeServer": "Kohalik mäng ei ole enam avalikult hostitud",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Kohalik mäng ei ole avalikult hostitud",
+    "text.e4mc_minecraft.clickToStop": " (Klõpsa lõpetamiseks)"
+}
