@@ -237,9 +237,17 @@ public class QuiclimeSession {
     }
 
     private static BrokerResponse getRelay() throws Exception {
-        String region = Config.INSTANCE.region.value();
+        if (!Config.INSTANCE.useBroker.value()) {
+            LOGGER.info("Using custom relay (broker disabled)");
+            var resp = new BrokerResponse();
+            resp.id = "custom";
+            resp.host = Config.INSTANCE.relayHost.value();
+            resp.port = Config.INSTANCE.relayPort.value();
+            return resp;
+        }
 
-        if (!"auto".equalsIgnoreCase(region) && Config.INSTANCE.useBroker.value()) {
+        String region = Config.INSTANCE.region.value();
+        if (!"auto".equalsIgnoreCase(region)) {
             LOGGER.info("Manual region selection: {}", region);
             var resp = new BrokerResponse();
             resp.id = region;
@@ -248,28 +256,19 @@ public class QuiclimeSession {
             return resp;
         }
 
-        if (Config.INSTANCE.useBroker.value()) {
-            LOGGER.info("Automatic region selection via broker");
-            var httpClient = HttpClient.newHttpClient();
-            var request = HttpRequest
-                    .newBuilder(new URI(Config.INSTANCE.brokerUrl.value()))
-                    .header("Accept", "application/json")
-                    .build();
-            LOGGER.info("req: {}", request);
-            var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            LOGGER.info("resp: {}", response);
-            if (response.statusCode() != 200) {
-                throw new RuntimeException("Failed to get relay from broker: " + response.body());
-            }
-            return gson.fromJson(response.body(), BrokerResponse.class);
-        } else {
-            LOGGER.info("Using custom relay (broker disabled)");
-            var resp = new BrokerResponse();
-            resp.id = "custom";
-            resp.host = Config.INSTANCE.relayHost.value();
-            resp.port = Config.INSTANCE.relayPort.value();
-            return resp;
+        LOGGER.info("Automatic region selection via broker");
+        var httpClient = HttpClient.newHttpClient();
+        var request = HttpRequest
+                .newBuilder(new URI(Config.INSTANCE.brokerUrl.value()))
+                .header("Accept", "application/json")
+                .build();
+        LOGGER.info("req: {}", request);
+        var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        LOGGER.info("resp: {}", response);
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Failed to get relay from broker: " + response.body());
         }
+        return gson.fromJson(response.body(), BrokerResponse.class);
     }
 
     public void start() {
@@ -286,9 +285,9 @@ public class QuiclimeSession {
                     .initialMaxStreamsBidirectional(512)
                     .maxIdleTimeout(10, TimeUnit.SECONDS)
                     .initialMaxData(4611686018427387903L)
-                    .initialMaxStreamDataBidirectionalRemote(15000000)
-                    .initialMaxStreamDataBidirectionalLocal(15000000)
-                    .initialMaxStreamDataUnidirectional(15000000)
+                    .initialMaxStreamDataBidirectionalRemote(1250000)
+                    .initialMaxStreamDataBidirectionalLocal(1250000)
+                    .initialMaxStreamDataUnidirectional(1250000)
                     .build();
             new Bootstrap()
                     .group(group)

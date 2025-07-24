@@ -21,4 +21,5 @@ public class Config extends ReflectiveConfig {
     public final TrackedValue<Boolean> restoreDedicatedCommands = this.value(true);
     @Comment("Whether to use whitelists on LAN worlds")
     public final TrackedValue<Boolean> useWhiteList = this.value(false);
+
 }
