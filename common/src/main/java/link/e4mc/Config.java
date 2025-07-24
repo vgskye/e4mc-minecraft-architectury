@@ -10,6 +10,7 @@ public class Config extends ReflectiveConfig {
     @Comment("Whether to use the broker to get the best relay based on location or use a hard-coded relay.")
     public final TrackedValue<Boolean> useBroker = this.value(true);
     public final TrackedValue<String> brokerUrl = this.value("https://broker.e4mc.link/getBestRelay");
+
     public final TrackedValue<String> relayHost = this.value("test.e4mc.link");
     public final TrackedValue<Integer> relayPort = this.value(25575);
 
@@ -17,5 +18,4 @@ public class Config extends ReflectiveConfig {
     public final TrackedValue<Boolean> restoreDedicatedCommands = this.value(true);
     @Comment("Whether to use whitelists on LAN worlds")
     public final TrackedValue<Boolean> useWhiteList = this.value(false);
-
 }
