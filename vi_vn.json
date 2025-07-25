@@ -1,7 +1,0 @@
-{
-    "text.e4mc_minecraft.domainAssigned": "Trò chơi được mở trên máy chủ : [%s]",
-    "text.e4mc_minecraft.closeServer": "Trò chơi đã được đóng trên máy chủ",
-    "text.e4mc_minecraft.serverAlreadyClosed": "Trò chơi chưa được mở trên máy chủ công cộng",
-    "text.e4mc_minecraft.clickToStop": " (Bấm vào đây để tạm dừng)",
-    "text.e4mc_minecraft.error": "Một lỗi không xác định đã xảy ra trong e4mc"
-}
