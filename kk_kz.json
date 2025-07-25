@@ -1,7 +1,0 @@
-{
-    "text.e4mc_minecraft.domainAssigned": "Жергілікті сервер [%s] доменінде орналасқан",
-    "text.e4mc_minecraft.closeServer": "Жергілікті сервер енді жалпыға қолжетімді емес",
-    "text.e4mc_minecraft.serverAlreadyClosed": "Жергілікті сервер жалпыға қолжетімді емес",
-    "text.e4mc_minecraft.clickToStop": " (Тоқтату үшін осы жерді басыңыз)",
-    "text.e4mc_minecraft.error": "e4mc ішінде қате пайда болды"
-}
