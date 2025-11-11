@@ -325,7 +325,7 @@ public class QuiclimeSession {
                         if (Agnos.isClient()) {
                             Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
                         }
-                        throw new RuntimeException(datagramChannelFuture.cause());
+                        throw new RuntimeException(quicChannelFuture.cause());
                     }
                     quicChannel = (QuicChannel) quicChannelFuture.get();
                     quicChannel.createStream(QuicStreamType.BIDIRECTIONAL,
