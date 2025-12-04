@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.commands.*;
+import net.minecraft.server.players.NameAndId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,7 @@ public class E4mcClient {
                                 return src.hasPermission(4);
                             } else {
                                 try {
-                                    return src.getServer().isSingleplayerOwner(src.getPlayerOrException().getGameProfile());
+                                    return src.getServer().isSingleplayerOwner(new NameAndId(src.getPlayerOrException().getGameProfile()));
                                 } catch (CommandSyntaxException e) {
                                     return false;
                                 }

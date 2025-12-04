@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class AgnosImpl {
     public static boolean isClient() {
-        return FMLLoader.getDist().equals(Dist.CLIENT);
+        return FMLLoader.getCurrent().getDist().equals(Dist.CLIENT);
     }
 
     public static Path configDir() {
@@ -16,6 +16,6 @@ public class AgnosImpl {
     }
 
     public static Path jarPath() {
-        return FMLLoader.getLoadingModList().getMods().stream().filter(modInfo -> modInfo.getModId().equals("e4mc_minecraft")).findAny().get().getOwningFile().getFile().getFilePath();
+        return FMLLoader.getCurrent().getLoadingModList().getMods().stream().filter(modInfo -> modInfo.getModId().equals("e4mc_minecraft")).findAny().get().getOwningFile().getFile().getFilePath();
     }
 }
