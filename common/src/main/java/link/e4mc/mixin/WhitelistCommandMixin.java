@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.WhitelistCommand;
+import net.minecraft.server.players.NameAndId;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -17,7 +18,7 @@ public class WhitelistCommandMixin {
     private static ArgumentBuilder<CommandSourceStack, LiteralArgumentBuilder<CommandSourceStack>> allowOwner(LiteralArgumentBuilder<CommandSourceStack> instance, Predicate<CommandSourceStack> predicate) {
         return instance.requires(src -> {
             try {
-                if (src.getServer().isSingleplayerOwner(src.getPlayerOrException().getGameProfile()))
+                if (src.getServer().isSingleplayerOwner(new NameAndId(src.getPlayerOrException().getGameProfile())))
                     return true;
             } catch (CommandSyntaxException ignored) {
             }

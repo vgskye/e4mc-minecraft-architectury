@@ -85,7 +85,7 @@ public class Mirror {
                          InvocationTargetException | ClassCastException ignored) {}
             }
         } else {
-            return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+            return new ClickEvent.RunCommand(command);
         }
         throw new RuntimeException("Could not locate any way to make a ClickEvent!");
     }
@@ -101,7 +101,7 @@ public class Mirror {
                          InvocationTargetException | ClassCastException ignored) {}
             }
         } else {
-            return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text);
+            return new ClickEvent.CopyToClipboard(text);
         }
         throw new RuntimeException("Could not locate any way to make a ClickEvent!");
     }
@@ -117,7 +117,7 @@ public class Mirror {
                          InvocationTargetException | ClassCastException ignored) {}
             }
         } else {
-            return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+            return new HoverEvent.ShowText(text);
         }
         throw new RuntimeException("Could not locate any way to make a ClickEvent!");
     }
