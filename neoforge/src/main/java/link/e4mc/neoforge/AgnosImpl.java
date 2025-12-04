@@ -1,6 +1,7 @@
 package link.e4mc.neoforge;
 
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
 
@@ -8,7 +9,7 @@ import java.nio.file.Path;
 
 public class AgnosImpl {
     public static boolean isClient() {
-        return FMLLoader.getCurrent().getDist().equals(Dist.CLIENT);
+        return FMLEnvironment.getDist().equals(Dist.CLIENT);
     }
 
     public static Path configDir() {
