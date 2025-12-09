@@ -357,13 +357,14 @@ public class QuiclimeSession {
                                                                     .withColor(ChatFormatting.GRAY)
                                                     )
                                             );
-                                            Minecraft.getInstance().gui.getChat().addMessage(message);
+                                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(message));
                                         }
                                     }
                                     if (msg instanceof ControlMessageCodec.RequestMessageBroadcastMessageClientbound) {
 
                                         if (Agnos.isClient()) {
-                                            Minecraft.getInstance().gui.getChat().addMessage(Mirror.literal(((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message));
+                                            String broadcastMsg = ((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message;
+                                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.literal(broadcastMsg)));
                                         }
                                     }
                                 }
@@ -373,7 +374,7 @@ public class QuiclimeSession {
                         if (!it.isSuccess()) {
                             QuiclimeSession.this.state = State.UNHEALTHY;
                             if (Agnos.isClient()) {
-                                Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+                                Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
                             }
                             throw new RuntimeException(datagramChannelFuture.cause());
                         }

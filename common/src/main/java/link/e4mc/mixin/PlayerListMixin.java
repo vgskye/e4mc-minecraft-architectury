@@ -1,6 +1,5 @@
 package link.e4mc.mixin;
 
-import com.mojang.authlib.GameProfile;
 import link.e4mc.Config;
 import link.e4mc.E4mcClient;
 import net.minecraft.network.chat.Component;
@@ -8,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserBanList;
 import net.minecraft.server.players.UserWhiteList;
+import net.minecraft.server.players.NameAndId;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,18 +20,15 @@ import java.net.SocketAddress;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
-    @Shadow public abstract void setUsingWhiteList(boolean bl);
-
     @Shadow public abstract UserBanList getBans();
 
     @Shadow public abstract UserWhiteList getWhiteList();
 
     @Shadow public abstract MinecraftServer getServer();
 
-    @Inject(method = "/^<init>$/", at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("TAIL"))
     void injectListLoads(CallbackInfo ci) {
         if (Config.INSTANCE.restoreDedicatedCommands.value()) {
-            setUsingWhiteList(Config.INSTANCE.useWhiteList.value());
             try {
                 this.getBans().load();
             } catch (IOException e) {
@@ -45,14 +42,9 @@ public abstract class PlayerListMixin {
         }
     }
 
-    @Inject(method = "setUsingWhiteList", at = @At("TAIL"))
-    public void injectSetUsingWhiteList(boolean bl, CallbackInfo ci) {
-        Config.INSTANCE.useWhiteList.setValue(bl);
-    }
-
     @Inject(method = "canPlayerLogin", at = @At("HEAD"), cancellable = true)
-    public void allowOwnerLogin(SocketAddress socketAddress, GameProfile gameProfile, CallbackInfoReturnable<Component> cir) {
-        if (this.getServer().isSingleplayerOwner(gameProfile)) {
+    public void allowOwnerLogin(SocketAddress socketAddress, NameAndId nameAndId, CallbackInfoReturnable<Component> cir) {
+        if (this.getServer().isSingleplayerOwner(nameAndId)) {
             cir.setReturnValue(null);
         }
     }

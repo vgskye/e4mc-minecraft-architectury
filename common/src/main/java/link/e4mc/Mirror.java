@@ -75,51 +75,39 @@ public class Mirror {
     };
 
     public static ClickEvent runCommand(String command) {
-        if (ClickEvent.class.isInterface()) {
-            for (String className : RUNCOMMAND_CLASS_NAMES) {
-                try {
-                    Class<?> clazz = Class.forName(className);
-                    Constructor<?> constructor = clazz.getConstructor(String.class);
-                    return (ClickEvent) constructor.newInstance(command);
-                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                         InvocationTargetException | ClassCastException ignored) {}
-            }
-        } else {
-            return new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
+        for (String className : RUNCOMMAND_CLASS_NAMES) {
+            try {
+                Class<?> clazz = Class.forName(className);
+                Constructor<?> constructor = clazz.getConstructor(String.class);
+                return (ClickEvent) constructor.newInstance(command);
+            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException | ClassCastException ignored) {}
         }
         throw new RuntimeException("Could not locate any way to make a ClickEvent!");
     }
 
     public static ClickEvent copyToClipboard(String text) {
-        if (ClickEvent.class.isInterface()) {
-            for (String className : COPYTOCLIPBOARD_CLASS_NAMES) {
-                try {
-                    Class<?> clazz = Class.forName(className);
-                    Constructor<?> constructor = clazz.getConstructor(String.class);
-                    return (ClickEvent) constructor.newInstance(text);
-                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                         InvocationTargetException | ClassCastException ignored) {}
-            }
-        } else {
-            return new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, text);
+        for (String className : COPYTOCLIPBOARD_CLASS_NAMES) {
+            try {
+                Class<?> clazz = Class.forName(className);
+                Constructor<?> constructor = clazz.getConstructor(String.class);
+                return (ClickEvent) constructor.newInstance(text);
+            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException | ClassCastException ignored) {}
         }
         throw new RuntimeException("Could not locate any way to make a ClickEvent!");
     }
 
     public static HoverEvent showText(Component text) {
-        if (HoverEvent.class.isInterface()) {
-            for (String className : SHOWTEXT_CLASS_NAMES) {
-                try {
-                    Class<?> clazz = Class.forName(className);
-                    Constructor<?> constructor = clazz.getConstructor(Component.class);
-                    return (HoverEvent) constructor.newInstance(text);
-                } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                         InvocationTargetException | ClassCastException ignored) {}
-            }
-        } else {
-            return new HoverEvent(HoverEvent.Action.SHOW_TEXT, text);
+        for (String className : SHOWTEXT_CLASS_NAMES) {
+            try {
+                Class<?> clazz = Class.forName(className);
+                Constructor<?> constructor = clazz.getConstructor(Component.class);
+                return (HoverEvent) constructor.newInstance(text);
+            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException | ClassCastException ignored) {}
         }
-        throw new RuntimeException("Could not locate any way to make a ClickEvent!");
+        throw new RuntimeException("Could not locate any way to make a HoverEvent!");
     }
 
     public static Component withStyle(Component component, UnaryOperator<Style> operator) {

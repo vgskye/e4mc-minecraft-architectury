@@ -42,7 +42,7 @@ public class E4mcClient {
                                 return src.hasPermission(4);
                             } else {
                                 try {
-                                    return src.getServer().isSingleplayerOwner(src.getPlayerOrException().getGameProfile());
+                                    return src.getServer().isSingleplayerOwner(src.getPlayerOrException().nameAndId());
                                 } catch (CommandSyntaxException e) {
                                     return false;
                                 }

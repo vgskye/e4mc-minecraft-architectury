@@ -17,7 +17,7 @@ public class PardonCommandMixin {
     private static ArgumentBuilder<CommandSourceStack, LiteralArgumentBuilder<CommandSourceStack>> allowOwner(LiteralArgumentBuilder<CommandSourceStack> instance, Predicate<CommandSourceStack> predicate) {
         return instance.requires(src -> {
             try {
-                if (src.getServer().isSingleplayerOwner(src.getPlayerOrException().getGameProfile()))
+                if (src.getServer().isSingleplayerOwner(src.getPlayerOrException().nameAndId()))
                     return true;
             } catch (CommandSyntaxException ignored) {
             }
