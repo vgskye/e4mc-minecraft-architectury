@@ -5,6 +5,9 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -72,6 +75,24 @@ public class Mirror {
             "net.minecraft.text.HoverEvent$ShowText", // yarn
             "net.minecraft.network.chat.HoverEvent$ShowText",
             "net.minecraft.class_2568$class_10613"
+    };
+    private static final String[] NAME_AND_ID_METHOD_NAMES = {
+            "nameAndId",
+            "method_72498",
+            "getPlayerConfigEntry"
+    };
+    private static final String[] IS_SINGLEPLAYER_OWNER_METHOD_NAMES = {
+            "isSingleplayerOwner",
+            "method_19466",
+            "m_7779_"
+    };
+    private static final String[] SET_USING_WHITELIST_METHOD_NAMES = {
+            "setUsingWhiteList",
+            "m_6628_",
+            "method_14557",
+            "setWhitelistEnabled",
+            "setUsingWhitelist",
+            "method_73589",
     };
 
     public static ClickEvent runCommand(String command) {
@@ -205,5 +226,53 @@ public class Mirror {
                 method.invoke(source, (Supplier<Component>) () -> message, true);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
         }
+    }
+
+    public static boolean isSingleplayerOwner(MinecraftServer server, ServerPlayer player) {
+        Class<ServerPlayer> clazz = ServerPlayer.class;
+        Object profile = player.getGameProfile();
+        for (String methodName : NAME_AND_ID_METHOD_NAMES) {
+            try {
+                Method method = clazz.getMethod(methodName);
+                profile = method.invoke(player);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        }
+        Class<MinecraftServer> clazz2 = MinecraftServer.class;
+        for (String methodName : IS_SINGLEPLAYER_OWNER_METHOD_NAMES) {
+            try {
+                Method method = clazz2.getMethod(methodName, profile.getClass());
+                return (boolean) method.invoke(server, profile);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        }
+        throw new RuntimeException("Could not locate any way to call isSingleplayerOwner!");
+    }
+
+    public static boolean isSingleplayerOwnerObj(MinecraftServer server, Object maybeProfile) {
+        Class<MinecraftServer> clazz2 = MinecraftServer.class;
+        for (String methodName : IS_SINGLEPLAYER_OWNER_METHOD_NAMES) {
+            try {
+                Method method = clazz2.getMethod(methodName, maybeProfile.getClass());
+                return (boolean) method.invoke(server, maybeProfile);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        }
+        throw new RuntimeException("Could not locate any way to call isSingleplayerOwner!");
+    }
+
+    public static void setUsingWhitelist(MinecraftServer server, PlayerList playerList, boolean enabled) {
+        Class<MinecraftServer> clazz = MinecraftServer.class;
+        Class<PlayerList> clazz2 = PlayerList.class;
+        for (String methodName : SET_USING_WHITELIST_METHOD_NAMES) {
+            try {
+                Method method = clazz.getMethod(methodName, boolean.class);
+                method.invoke(server, enabled);
+                return;
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+            try {
+                Method method = clazz2.getMethod(methodName, boolean.class);
+                method.invoke(playerList, enabled);
+                return;
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        }
+        throw new RuntimeException("Could not locate any way to call setUsingWhitelist!");
     }
 }

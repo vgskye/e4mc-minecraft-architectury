@@ -38,11 +38,14 @@ public class E4mcClient {
         dispatcher.register(
                 Commands.literal("e4mc")
                         .requires(src -> {
+                            if (src.getServer() == null) {
+                                return false;
+                            }
                             if (src.getServer().isDedicatedServer()) {
                                 return src.hasPermission(4);
                             } else {
                                 try {
-                                    return src.getServer().isSingleplayerOwner(src.getPlayerOrException().getGameProfile());
+                                    return Mirror.isSingleplayerOwner(src.getServer(), src.getPlayerOrException());
                                 } catch (CommandSyntaxException e) {
                                     return false;
                                 }
@@ -60,7 +63,7 @@ public class E4mcClient {
                         .then(Commands.literal("restart").executes(ctx -> {
                             if ((session != null) && (session.state != QuiclimeSession.State.STARTED)) {
                                 session.stop();
-                                session = new QuiclimeSession();
+                                session = new QuiclimeSession(session.handler);
                                 session.startAsync();
                             }
                             return 1;

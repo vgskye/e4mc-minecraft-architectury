@@ -35,6 +35,8 @@ import java.util.function.Consumer;
 public class QuiclimeSession {
     private static final Gson gson = new Gson();
     private static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
+    final ChannelHandler handler;
+
     private static class ControlMessageCodec extends ByteToMessageCodec<ControlMessageCodec.ControlMessage> {
         public ControlMessageCodec() {
             super();
@@ -92,122 +94,6 @@ public class QuiclimeSession {
         }
     }
 
-    private class ToMinecraftHandler extends ChannelInboundHandlerAdapter {
-        QuicStreamChannel toQuiclime;
-        public ToMinecraftHandler(QuicStreamChannel channel) {
-            super();
-            toQuiclime = channel;
-        }
-
-        @Override
-        public void channelActive(ChannelHandlerContext ctx) {
-            ctx.read();
-        }
-
-        @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            toQuiclime.writeAndFlush(msg).addListener(it -> {
-                if (it.isSuccess()) {
-                    ctx.channel().read();
-                } else {
-                    QuiclimeSession.this.state = State.UNHEALTHY;
-                    if (Agnos.isClient()) {
-                        Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
-                    }
-                    toQuiclime.close();
-                }
-            });
-        }
-
-        @Override
-        public void channelInactive(ChannelHandlerContext ctx) {
-            LOGGER.info("channel inactive(from MC): {} (MC: {})", toQuiclime, ctx.channel());
-            if (toQuiclime.isActive()) {
-                toQuiclime.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-            }
-        }
-
-        @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            super.exceptionCaught(ctx, cause);
-            QuiclimeSession.this.state = State.UNHEALTHY;
-            if (Agnos.isClient()) {
-                Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
-            }
-            this.channelInactive(ctx);
-        }
-    }
-
-    private class ToQuiclimeHandler extends ChannelInboundHandlerAdapter {
-        LocalChannel toMinecraft;
-
-        @Override
-        public void channelActive(ChannelHandlerContext ctx) {
-            LOGGER.info("channel active: {}", ctx.channel());
-            var fut = new Bootstrap()
-                    .group(ctx.channel().eventLoop())
-                    .channel(LocalChannel.class)
-                    .handler(new ToMinecraftHandler((QuicStreamChannel) ctx.channel()))
-                    .option(ChannelOption.AUTO_READ, false)
-                    .connect(new LocalAddress("e4mc-relay"));
-            toMinecraft = (LocalChannel) fut.channel();
-            fut.addListener(it -> {
-                if (it.isSuccess()) {
-                    ctx.channel().read();
-                } else {
-                    QuiclimeSession.this.state = State.UNHEALTHY;
-                    if (Agnos.isClient()) {
-                        Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
-                    }
-                    ctx.channel().close();
-                }
-            });
-        }
-
-        @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            if (toMinecraft.isActive()) {
-                toMinecraft.writeAndFlush(msg).addListener(it -> {
-                    if (it.isSuccess()) {
-                        ctx.channel().read();
-                    } else {
-                        QuiclimeSession.this.state = State.UNHEALTHY;
-                        if (Agnos.isClient()) {
-                            Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
-                        }
-                        ((ChannelFuture) it).channel().close();
-                    }
-                });
-            }
-        }
-
-        @Override
-        public void channelInactive(ChannelHandlerContext ctx) {
-            LOGGER.info("channel inactive(from Quiclime): {} (MC: {})", ctx.channel(), toMinecraft);
-            if (toMinecraft.isActive()) {
-                toMinecraft.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-            }
-        }
-
-        @Override
-        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-            if (evt.equals(ChannelInputShutdownReadComplete.INSTANCE)) {
-                this.channelInactive(ctx);
-            }
-            super.userEventTriggered(ctx, evt);
-        }
-
-        @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            super.exceptionCaught(ctx, cause);
-            QuiclimeSession.this.state = State.UNHEALTHY;
-            if (Agnos.isClient()) {
-                Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
-            }
-            this.channelInactive(ctx);
-        }
-    }
-
     public State state = State.STARTING;
     public enum State {
         STARTING,
@@ -227,7 +113,8 @@ public class QuiclimeSession {
     private NioDatagramChannel datagramChannel;
     private QuicChannel quicChannel;
 
-    public QuiclimeSession() {
+    public QuiclimeSession(ChannelHandler handler) {
+        this.handler = handler;
     }
 
     public void startAsync() {
@@ -286,27 +173,20 @@ public class QuiclimeSession {
                 if (!datagramChannelFuture.isSuccess()) {
                     QuiclimeSession.this.state = State.UNHEALTHY;
                     if (Agnos.isClient()) {
-                        Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+                        Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
                     }
                     throw new RuntimeException(datagramChannelFuture.cause());
                 }
                 datagramChannel = (NioDatagramChannel) ((ChannelFuture) datagramChannelFuture).channel();
                 QuicChannel.newBootstrap(datagramChannel)
-                        .streamHandler(
-                                new ChannelInitializer<QuicStreamChannel>() {
-                                    @Override
-                                    protected void initChannel(QuicStreamChannel channel) {
-                                        channel.pipeline().addLast(new ToQuiclimeHandler());
-                                    }
-                                }
-                        )
+                        .streamHandler(handler)
                         .handler(new ChannelInboundHandlerAdapter() {
                             @Override
                             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
                                 super.exceptionCaught(ctx, cause);
                                 QuiclimeSession.this.state = State.UNHEALTHY;
                                 if (Agnos.isClient()) {
-                                    Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+                                    Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
                                 }
                             }
 
@@ -316,14 +196,13 @@ public class QuiclimeSession {
                                 state = State.STOPPED;
                             }
                         })
-                        .streamOption(ChannelOption.AUTO_READ, false)
                         .remoteAddress(new InetSocketAddress(InetAddress.getByName(relayInfo.host), relayInfo.port))
                         .connect()
                         .addListener(quicChannelFuture -> {
                     if (!quicChannelFuture.isSuccess()) {
                         QuiclimeSession.this.state = State.UNHEALTHY;
                         if (Agnos.isClient()) {
-                            Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
                         }
                         throw new RuntimeException(quicChannelFuture.cause());
                     }
@@ -357,13 +236,13 @@ public class QuiclimeSession {
                                                                     .withColor(ChatFormatting.GRAY)
                                                     )
                                             );
-                                            Minecraft.getInstance().gui.getChat().addMessage(message);
+                                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(message));
                                         }
                                     }
                                     if (msg instanceof ControlMessageCodec.RequestMessageBroadcastMessageClientbound) {
 
                                         if (Agnos.isClient()) {
-                                            Minecraft.getInstance().gui.getChat().addMessage(Mirror.literal(((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message));
+                                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.literal(((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message)));
                                         }
                                     }
                                 }
@@ -373,7 +252,7 @@ public class QuiclimeSession {
                         if (!it.isSuccess()) {
                             QuiclimeSession.this.state = State.UNHEALTHY;
                             if (Agnos.isClient()) {
-                                Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+                                Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
                             }
                             throw new RuntimeException(datagramChannelFuture.cause());
                         }
@@ -391,7 +270,7 @@ public class QuiclimeSession {
         } catch (Throwable e) {
             QuiclimeSession.this.state = State.UNHEALTHY;
             if (Agnos.isClient()) {
-                Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+                Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
             }
             throw new RuntimeException(e);
         }

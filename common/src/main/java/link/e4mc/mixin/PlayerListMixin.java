@@ -3,6 +3,7 @@ package link.e4mc.mixin;
 import com.mojang.authlib.GameProfile;
 import link.e4mc.Config;
 import link.e4mc.E4mcClient;
+import link.e4mc.Mirror;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.players.PlayerList;
@@ -11,6 +12,7 @@ import net.minecraft.server.players.UserWhiteList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,8 +22,6 @@ import java.net.SocketAddress;
 
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
-    @Shadow public abstract void setUsingWhiteList(boolean bl);
-
     @Shadow public abstract UserBanList getBans();
 
     @Shadow public abstract UserWhiteList getWhiteList();
@@ -31,7 +31,7 @@ public abstract class PlayerListMixin {
     @Inject(method = "/^<init>$/", at = @At("TAIL"))
     void injectListLoads(CallbackInfo ci) {
         if (Config.INSTANCE.restoreDedicatedCommands.value()) {
-            setUsingWhiteList(Config.INSTANCE.useWhiteList.value());
+            Mirror.setUsingWhitelist(getServer(), (PlayerList) (Object) this, Config.INSTANCE.useWhiteList.value());
             try {
                 this.getBans().load();
             } catch (IOException e) {
@@ -45,14 +45,9 @@ public abstract class PlayerListMixin {
         }
     }
 
-    @Inject(method = "setUsingWhiteList", at = @At("TAIL"))
-    public void injectSetUsingWhiteList(boolean bl, CallbackInfo ci) {
-        Config.INSTANCE.useWhiteList.setValue(bl);
-    }
-
-    @Inject(method = "canPlayerLogin", at = @At("HEAD"), cancellable = true)
-    public void allowOwnerLogin(SocketAddress socketAddress, GameProfile gameProfile, CallbackInfoReturnable<Component> cir) {
-        if (this.getServer().isSingleplayerOwner(gameProfile)) {
+    @Inject(method = "/^(canPlayerLogin|method_14586|checkCanJoin|m_6418_)$/", at = @At("HEAD"), cancellable = true)
+    public void allowOwnerLogin(SocketAddress socketAddress, @Coerce Object gameProfile, CallbackInfoReturnable<Component> cir) {
+        if (Mirror.isSingleplayerOwnerObj(getServer(), gameProfile)) {
             cir.setReturnValue(null);
         }
     }
