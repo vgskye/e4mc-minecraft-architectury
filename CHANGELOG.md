@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.5.0
+
+- Added `/e4mc doctor`, which prints e4mc-related diagnostics for troubleshooting
+
 ## 5.4.2
 
 - Now supports 1.21.9, 1.21.10, 1.21.11

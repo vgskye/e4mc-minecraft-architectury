@@ -17,17 +17,17 @@ public class E4mcClient {
     public static final String MOD_ID = "e4mc_minecraft";
     public static QuiclimeSession session;
     public static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
+
+    public static boolean badurl = false;
+
     public static void init() {
         Config.INSTANCE.id(); // Touch to initialize for McQoy
-//        if (System.getProperty("os.name").startsWith("Windows")) {
-//            var path = Agnos.jarPath();
-//            var motwPath = path + ":Zone.Identifier";
-//            try(FileInputStream inputStream = new FileInputStream(motwPath)) {
-//                String hidden = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-//                LOGGER.warn(hidden);
-//            } catch (IOException ignored) {}
-//        }
+        if (!PoisonPill.checkMotw()) {
+            badurl = true;
+            LOGGER.warn("MotW lists unknown source! Poison pill active!");
+        }
     }
+
     public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
         if (Config.INSTANCE.restoreDedicatedCommands.value() && Agnos.isClient()) {
             BanListCommands.register(dispatcher);
@@ -58,6 +58,18 @@ public class E4mcClient {
                             } else {
                                 Mirror.sendFailureToSource(ctx.getSource(), Mirror.translatable("text.e4mc_minecraft.serverAlreadyClosed"));
                             }
+                            return 1;
+                        }))
+                        .then(Commands.literal("doctor").executes(ctx -> {
+                            var thread = new Thread(() -> {
+                                LOGGER.info("generating e4mc doctor report");
+                                Mirror.sendSuccessToSource(ctx.getSource(), Mirror.translatable("text.e4mc_minecraft.doctor.start"));
+                                var diag = Doctor.doctor();
+                                LOGGER.info("e4mc doctor report:\n{}", diag);
+                                Mirror.sendSuccessToSource(ctx.getSource(), Mirror.literal(diag));
+                            }, "e4mc_minecraft-doctor");
+                            thread.setDaemon(true);
+                            thread.start();
                             return 1;
                         }))
                         .then(Commands.literal("restart").executes(ctx -> {
