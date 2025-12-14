@@ -8,11 +8,6 @@ import net.minecraft.server.commands.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 public class E4mcClient {
     public static final String MOD_ID = "e4mc_minecraft";
     public static QuiclimeSession session;
@@ -22,9 +17,13 @@ public class E4mcClient {
 
     public static void init() {
         Config.INSTANCE.id(); // Touch to initialize for McQoy
-        if (!PoisonPill.checkMotw()) {
-            badurl = true;
-            LOGGER.warn("MotW lists unknown source! Poison pill active!");
+        try {
+            if (!PoisonPill.checkMotw()) {
+                badurl = true;
+                LOGGER.warn("MotW lists unknown source! Poison pill active!");
+            }
+        } catch (Exception e) {
+            LOGGER.warn("MotW check failed!", e);
         }
     }
 

@@ -2,6 +2,10 @@
 
 ## 5.5.0
 
+- Fixed a crash on some NeoForge versions
+
+## 5.5.0
+
 - Added `/e4mc doctor`, which prints e4mc-related diagnostics for troubleshooting
 
 ## 5.4.2
