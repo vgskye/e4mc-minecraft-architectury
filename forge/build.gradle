@@ -31,7 +31,7 @@ dependencies {
     shadowCommon(implementation("io.netty.incubator:netty-incubator-codec-classes-quic:${rootProject.quic_version}") {
         exclude(group: "io.netty")
     })
-    shadowCommon('folk.sisby:kaleido-config:0.3.1+1.3.1')
+    shadowCommon('folk.sisby:kaleido-config:0.3.3+1.3.2')
 }
 
 processResources {

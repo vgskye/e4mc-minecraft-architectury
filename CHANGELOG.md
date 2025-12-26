@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.5.2
+
+- Fixed some errors by updating dependencies.
+
 ## 5.5.1
 
 - Fixed a crash on some NeoForge versions
