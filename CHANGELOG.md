@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.5.3
+
+- Mildly improved performance and footprint by reusing Minecraft's `EventLoopGroup`.
+- Fixed the inability to join using certain Forge versions with the message "Disconnected".
+- Fixed an issue where e4mc would keep an unjoinable ghost session running after closing the world.
+
 ## 5.5.2
 
 - Fixed some errors by updating dependencies.

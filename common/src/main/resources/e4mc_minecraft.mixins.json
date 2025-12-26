@@ -6,7 +6,6 @@
   "mixins": [
     "BanListCommandsMixin",
     "BanPlayerCommandsMixin",
-    "ConnectionMixin",
     "PardonCommandMixin",
     "ServerConnectionListenerMixin",
     "WhitelistCommandMixin"

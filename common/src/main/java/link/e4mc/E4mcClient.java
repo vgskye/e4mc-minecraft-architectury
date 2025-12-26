@@ -74,7 +74,7 @@ public class E4mcClient {
                         .then(Commands.literal("restart").executes(ctx -> {
                             if ((session != null) && (session.state != QuiclimeSession.State.STARTED)) {
                                 session.stop();
-                                session = new QuiclimeSession(session.handler);
+                                session = new QuiclimeSession(session.handler, session.group);
                                 session.startAsync();
                             }
                             return 1;

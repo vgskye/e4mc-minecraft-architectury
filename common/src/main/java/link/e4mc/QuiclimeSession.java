@@ -4,21 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.channel.local.LocalAddress;
-import io.netty.channel.local.LocalChannel;
+import io.netty.channel.epoll.EpollDatagramChannel;
+import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.ChannelInputShutdownReadComplete;
+import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.incubator.codec.quic.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,12 +107,13 @@ public class QuiclimeSession {
         int port;
     }
 
-    private final NioEventLoopGroup group = new NioEventLoopGroup();
-    private NioDatagramChannel datagramChannel;
+    final EventLoopGroup group;
+    private DatagramChannel datagramChannel;
     private QuicChannel quicChannel;
 
-    public QuiclimeSession(ChannelHandler handler) {
+    public QuiclimeSession(ChannelHandler handler, EventLoopGroup group) {
         this.handler = handler;
+        this.group = group;
     }
 
     public void startAsync() {
@@ -166,9 +163,15 @@ public class QuiclimeSession {
                     .initialMaxStreamDataBidirectionalLocal(1250000)
                     .initialMaxStreamDataUnidirectional(1250000)
                     .build();
+            Class<? extends DatagramChannel> channelClass = null;
+            if (group instanceof EpollEventLoopGroup) {
+                channelClass = EpollDatagramChannel.class;
+            } else if (group instanceof NioEventLoopGroup) {
+                channelClass = NioDatagramChannel.class;
+            }
             new Bootstrap()
                     .group(group)
-                    .channel(NioDatagramChannel.class)
+                    .channel(channelClass)
                     .handler(codec)
                     .bind(0)
                     .addListener(datagramChannelFuture -> {
@@ -176,7 +179,7 @@ public class QuiclimeSession {
                     fail(datagramChannelFuture.cause());
                     throw new RuntimeException(datagramChannelFuture.cause());
                 }
-                datagramChannel = (NioDatagramChannel) ((ChannelFuture) datagramChannelFuture).channel();
+                datagramChannel = (DatagramChannel) ((ChannelFuture) datagramChannelFuture).channel();
                 QuicChannel.newBootstrap(datagramChannel)
                         .streamHandler(handler)
                         .handler(new ChannelInboundHandlerAdapter() {
@@ -285,6 +288,6 @@ public class QuiclimeSession {
 
     public void stop() {
         state = State.STOPPING;
-        afterCloseIfPresent(quicChannel, a -> afterCloseIfPresent(datagramChannel, b -> group.shutdownGracefully().addListener(c -> state = State.STOPPED)));
+        afterCloseIfPresent(quicChannel, a -> afterCloseIfPresent(datagramChannel, b -> state = State.STOPPED));
     }
 }
