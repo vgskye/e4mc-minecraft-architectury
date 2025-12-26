@@ -7,7 +7,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollIoHandler;
+import io.netty.channel.kqueue.KQueueDatagramChannel;
+import io.netty.channel.kqueue.KQueueEventLoopGroup;
+import io.netty.channel.kqueue.KQueueIoHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -168,6 +173,18 @@ public class QuiclimeSession {
                 channelClass = EpollDatagramChannel.class;
             } else if (group instanceof NioEventLoopGroup) {
                 channelClass = NioDatagramChannel.class;
+            } else if (group instanceof KQueueEventLoopGroup) {
+                channelClass = KQueueDatagramChannel.class;
+            } else if (group instanceof MultiThreadIoEventLoopGroup mig) {
+                if (mig.isIoType(EpollIoHandler.class)) {
+                    channelClass = EpollDatagramChannel.class;
+                } else if (mig.isIoType(NioIoHandler.class)) {
+                    channelClass = NioDatagramChannel.class;
+                } else if (mig.isIoType(KQueueIoHandler.class)) {
+                    channelClass = KQueueDatagramChannel.class;
+                }
+            } else {
+                throw new RuntimeException("Unknown EventLoopGroup " + group.getClass().getName());
             }
             new Bootstrap()
                     .group(group)

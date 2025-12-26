@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.5.4
+
+- Fixed a regression on 1.21.11 and above due to Minecraft using Netty 4.2.
+
 ## 5.5.3
 
 - Mildly improved performance and footprint by reusing Minecraft's `EventLoopGroup`.
