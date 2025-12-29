@@ -6,14 +6,21 @@
   "mixins": [
     "BanListCommandsMixin",
     "BanPlayerCommandsMixin",
+    "ConnectionMixin",
     "PardonCommandMixin",
+    "ServerboundKeyPacketMixin",
     "ServerConnectionListenerMixin",
+    "ServerLoginPacketListenerImplMixin",
     "WhitelistCommandMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "PlayerListMixin"
+    "ClientHandshakePacketListenerImplMixin",
+    "PlayerListMixin",
+    "ServerAddressMixin",
+    "ServerNameResolverMixin",
+    "ServerRedirectHandlerMixin"
   ]
 }

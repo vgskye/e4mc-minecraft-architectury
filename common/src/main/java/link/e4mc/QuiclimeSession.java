@@ -3,6 +3,7 @@ package link.e4mc;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollDatagramChannel;
@@ -17,6 +18,8 @@ import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.incubator.codec.quic.*;
+import link.e4mc.dialtone.DialtoneAddress;
+import link.e4mc.dialtone.DialtoneServerChannel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -46,9 +49,22 @@ public class QuiclimeSession {
 
         public interface ControlMessage {}
 
+        public static class ProbeCapabilitiesMessageServerbound implements ControlMessage {
+            String kind = "probe_capabilities";
+            public ProbeCapabilitiesMessageServerbound() {}
+        }
+
         public static class RequestDomainAssignmentMessageServerbound implements ControlMessage {
             String kind = "request_domain_assignment";
             public RequestDomainAssignmentMessageServerbound() {}
+        }
+
+        public static class DialtoneRegisterTicketMessageServerbound implements ControlMessage {
+            String kind = "dialtone_register_ticket";
+            String ticket;
+            public DialtoneRegisterTicketMessageServerbound(String ticket) {
+                this.ticket = ticket;
+            }
         }
 
         public static class DomainAssignmentCompleteMessageClientbound implements ControlMessage {
@@ -67,11 +83,37 @@ public class QuiclimeSession {
             }
         }
 
+        public static class HasCapabilitiesMessageClientbound implements ControlMessage {
+            String kind = "has_capabilities";
+            String[] caps;
+            public HasCapabilitiesMessageClientbound(String[] caps) {
+                this.caps = caps;
+            }
+        }
+
+        public static class TicketRegisteredMessageClientbound implements ControlMessage {
+            String kind = "ticket_registered";
+            public TicketRegisteredMessageClientbound() {
+            }
+        }
+
+        public static class UnknownMessageMessageClientbound implements ControlMessage {
+            String kind = "ticket_registered";
+            public UnknownMessageMessageClientbound() {
+            }
+        }
+
         @Override
         protected void encode(ChannelHandlerContext ctx, ControlMessage msg, ByteBuf out) {
-            byte[] json = gson.toJson(msg).getBytes(StandardCharsets.UTF_8);
-            out.writeByte(json.length);
-            out.writeBytes(json);
+            E4mcClient.LOGGER.info("writing {}", msg);
+            try {
+                byte[] json = gson.toJson(msg).getBytes(StandardCharsets.UTF_8);
+                writeVarInt(out, json.length);
+                out.writeBytes(json);
+            } catch (Throwable e) {
+                E4mcClient.LOGGER.error("weird", e);
+            }
+            E4mcClient.LOGGER.info("writing {} bytes", out.readableBytes());
         }
 
         @Override
@@ -88,6 +130,15 @@ public class QuiclimeSession {
                         break;
                     case "request_message_broadcast":
                         out.add(gson.fromJson(json, RequestMessageBroadcastMessageClientbound.class));
+                        break;
+                    case "has_capabilities":
+                        out.add(gson.fromJson(json, HasCapabilitiesMessageClientbound.class));
+                        break;
+                    case "ticket_registered":
+                        out.add(gson.fromJson(json, TicketRegisteredMessageClientbound.class));
+                        break;
+                    case "unknown_message":
+                        out.add(gson.fromJson(json, UnknownMessageMessageClientbound.class));
                         break;
                     default:
                         throw new RuntimeException("Invalid message type!");
@@ -115,6 +166,8 @@ public class QuiclimeSession {
     final EventLoopGroup group;
     private DatagramChannel datagramChannel;
     private QuicChannel quicChannel;
+
+    private DialtoneServerChannel dialtoneChannel;
 
     public QuiclimeSession(ChannelHandler handler, EventLoopGroup group) {
         this.handler = handler;
@@ -256,9 +309,44 @@ public class QuiclimeSession {
                                         }
                                     }
                                     if (msg instanceof ControlMessageCodec.RequestMessageBroadcastMessageClientbound) {
-
                                         if (Agnos.isClient()) {
                                             Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.literal(((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message)));
+                                        }
+                                    }
+                                    if (msg instanceof ControlMessageCodec.HasCapabilitiesMessageClientbound) {
+                                        var streamChannel = ctx.channel();
+                                        boolean hasDialtoneSidecar = false;
+                                        for (String cap : ((ControlMessageCodec.HasCapabilitiesMessageClientbound) msg).caps) {
+                                            if (cap.equals("dialtone_sidecar")) {
+                                                hasDialtoneSidecar = true;
+                                                break;
+                                            }
+                                        }
+                                        if (hasDialtoneSidecar && Config.INSTANCE.dialtoneHostEnabled.value()) {
+                                            new ServerBootstrap()
+                                                    .channel(DialtoneServerChannel.class)
+                                                    .handler(new ChannelInboundHandlerAdapter() {
+                                                        @Override
+                                                        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                                            super.userEventTriggered(ctx, evt);
+                                                            if (evt instanceof DialtoneAddress addr) {
+                                                                streamChannel
+                                                                        .writeAndFlush(new ControlMessageCodec.DialtoneRegisterTicketMessageServerbound(addr.actualAddress))
+                                                                        .addListener(ignored -> LOGGER.info("notified server of our ticket"));
+                                                            }
+                                                        }
+                                                    })
+                                                    .childHandler(handler)
+                                                    .group(group)
+                                                    .localAddress(new DialtoneAddress(""))
+                                                    .bind()
+                                                    .addListener(dialtoneChannelFuture -> {
+                                                        if (!dialtoneChannelFuture.isSuccess()) {
+                                                            fail(dialtoneChannelFuture.cause());
+                                                            throw new RuntimeException(dialtoneChannelFuture.cause());
+                                                        }
+                                                        dialtoneChannel = (DialtoneServerChannel) dialtoneChannelFuture.get();
+                                                    });
                                         }
                                     }
                                 }
@@ -272,10 +360,11 @@ public class QuiclimeSession {
                         QuicStreamChannel streamChannel = (QuicStreamChannel) it.getNow();
                         LOGGER.info("control channel open: {}", streamChannel);
                         streamChannel
+                                .writeAndFlush(new ControlMessageCodec.ProbeCapabilitiesMessageServerbound())
+                                .addListener(ignored -> LOGGER.info("probing capabilities"));
+                        streamChannel
                                 .writeAndFlush(new ControlMessageCodec.RequestDomainAssignmentMessageServerbound())
                                 .addListener(ignored -> LOGGER.info("control channel write complete"));
-
-
                         quicChannel.closeFuture().addListener(ignored -> datagramChannel.close());
                     });
                 });
@@ -305,6 +394,17 @@ public class QuiclimeSession {
 
     public void stop() {
         state = State.STOPPING;
-        afterCloseIfPresent(quicChannel, a -> afterCloseIfPresent(datagramChannel, b -> state = State.STOPPED));
+        afterCloseIfPresent(dialtoneChannel, q -> afterCloseIfPresent(quicChannel, a -> afterCloseIfPresent(datagramChannel, b -> state = State.STOPPED)));
+    }
+
+
+    private static ByteBuf writeVarInt(ByteBuf buf, int value) {
+        while ((value & 0xffffff80) != 0) {
+            buf.writeByte(value & 0x7F | 0x80);
+            value >>>= 7;
+        }
+
+        buf.writeByte(value);
+        return buf;
     }
 }

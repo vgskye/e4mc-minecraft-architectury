@@ -2,6 +2,7 @@ package link.e4mc.mixin;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
+import link.e4mc.DialtoneServerSession;
 import link.e4mc.E4mcClient;
 import link.e4mc.QuiclimeSession;
 import net.minecraft.server.network.ServerConnectionListener;

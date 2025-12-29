@@ -13,6 +13,8 @@ public class E4mcClient {
     public static QuiclimeSession session;
     public static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
 
+    public static DialtoneServerSession dialtoneServerSession;
+
     public static boolean badurl = false;
 
     public static void init() {

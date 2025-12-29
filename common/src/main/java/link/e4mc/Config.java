@@ -18,4 +18,9 @@ public class Config extends ReflectiveConfig {
     public final TrackedValue<Boolean> restoreDedicatedCommands = this.value(true);
     @Comment("Whether to use whitelists on LAN worlds")
     public final TrackedValue<Boolean> useWhiteList = this.value(false);
+
+    @Comment("Whether to enable Dialtone peer-to-peer connections as the host")
+    public final TrackedValue<Boolean> dialtoneHostEnabled = this.value(true);
+    @Comment("Whether to enable Dialtone peer-to-peer connections as the player")
+    public final TrackedValue<Boolean> dialtonePlayerEnabled = this.value(true);
 }
