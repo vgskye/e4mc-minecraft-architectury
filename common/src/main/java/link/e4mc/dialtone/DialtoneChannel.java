@@ -22,7 +22,7 @@ public class DialtoneChannel extends AbstractChannel {
     Endpoint endpoint;
     Connection connection;
     Stream stream;
-    boolean closed = false;
+    volatile boolean closed = false;
     AtomicBoolean readInFlight = new AtomicBoolean(false);
     AtomicBoolean writeInFlight = new AtomicBoolean(false);
 
@@ -71,13 +71,13 @@ public class DialtoneChannel extends AbstractChannel {
 
     @Override
     protected void doClose() {
-        E4mcClient.LOGGER.info("doClose called");
-        pipeline().fireChannelInactive();
+//        E4mcClient.LOGGER.info("doClose called");
+        closed = true;
         stream.close();
         connection.close(0, new byte[0]);
         stream = null;
         connection = null;
-        closed = true;
+        pipeline().fireChannelInactive();
     }
 
     @Override
@@ -93,7 +93,9 @@ public class DialtoneChannel extends AbstractChannel {
         stream.readIrohStreamByteArray(65536).thenAccept(arr -> {
             readInFlight.set(false);
             if (arr == null) {
-                doClose();
+                if (!closed) {
+                    doClose();
+                }
                 return;
             }
 //            E4mcClient.LOGGER.info("received {}", HexFormat.of().formatHex(arr));
@@ -101,8 +103,10 @@ public class DialtoneChannel extends AbstractChannel {
             pipeline().fireChannelReadComplete();
         }).exceptionally(t -> {
             readInFlight.set(false);
-            E4mcClient.LOGGER.info("error reading", t);
-            pipeline().fireExceptionCaught(t);
+//            E4mcClient.LOGGER.info("error reading", t);
+            if (!closed) {
+                pipeline().fireExceptionCaught(t);
+            }
             return null;
         });
     }
@@ -175,7 +179,7 @@ public class DialtoneChannel extends AbstractChannel {
 
     @Override
     public boolean isActive() {
-        return stream != null;
+        return stream != null && !closed;
     }
 
     @Override

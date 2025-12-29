@@ -3,6 +3,7 @@ package link.e4mc.dialtone;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.EventLoopGroup;
 import link.e4mc.E4mcClient;
+import link.e4mc.QuiclimeSession;
 import link.e4mc.iroh.Endpoint;
 import link.e4mc.iroh.NativeException;
 
@@ -17,9 +18,9 @@ public class DialtoneAmbientSession {
 
     private DialtoneAmbientSession() {}
 
-    public void start() {
+    public void start() throws Exception {
         E4mcClient.LOGGER.info("Starting DialtoneAmbientSession!");
-        this.endpoint = new Endpoint(new byte[][]{"e4mc-dialtone".getBytes(StandardCharsets.UTF_8)});
+        this.endpoint = new Endpoint(new byte[][]{"e4mc-dialtone".getBytes(StandardCharsets.UTF_8)}, QuiclimeSession.getRelayMap());
         this.dispatcher = new Thread(() -> {
             while (true) {
                 try {

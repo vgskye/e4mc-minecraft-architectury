@@ -5,6 +5,7 @@ import io.netty.channel.ChannelConfig;
 import io.netty.channel.DefaultChannelConfig;
 import io.netty.channel.EventLoop;
 import link.e4mc.E4mcClient;
+import link.e4mc.QuiclimeSession;
 import link.e4mc.iroh.Endpoint;
 import link.e4mc.iroh.NativeException;
 
@@ -28,8 +29,8 @@ public class DialtoneServerChannel extends AbstractServerChannel {
     }
 
     @Override
-    protected void doBind(SocketAddress localAddress) {
-        this.endpoint = new Endpoint(new byte[][]{"e4mc-dialtone".getBytes(StandardCharsets.UTF_8)});
+    protected void doBind(SocketAddress localAddress) throws Exception {
+        this.endpoint = new Endpoint(new byte[][]{"e4mc-dialtone".getBytes(StandardCharsets.UTF_8)}, QuiclimeSession.getRelayMap());
         this.dispatcher = new Thread(() -> {
                 while (true) {
                     try {

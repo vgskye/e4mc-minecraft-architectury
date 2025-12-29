@@ -187,9 +187,9 @@ public class QuiclimeSession {
                     .newBuilder(new URI(Config.INSTANCE.brokerUrl.value()))
                     .header("Accept", "application/json")
                     .build();
-            LOGGER.info("req: {}", request);
+            LOGGER.info("broker req: {}", request);
             var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            LOGGER.info("resp: {}", response);
+            LOGGER.info("broker resp: {}", response);
             if (response.statusCode() != 200) {
                 throw new RuntimeException();
             }
@@ -201,6 +201,21 @@ public class QuiclimeSession {
             resp.port = Config.INSTANCE.relayPort.value();
             return resp;
         }
+    }
+
+    public static String[] getRelayMap() throws Exception {
+        var httpClient = HttpClient.newHttpClient();
+        var request = HttpRequest
+                .newBuilder(new URI(Config.INSTANCE.relayMap.value()))
+                .header("Accept", "application/json")
+                .build();
+        LOGGER.info("relaymap req: {}", request);
+        var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        LOGGER.info("relaymap resp: {}", response);
+        if (response.statusCode() != 200) {
+            throw new RuntimeException();
+        }
+        return gson.fromJson(response.body(), String[].class);
     }
 
     public void start() {
