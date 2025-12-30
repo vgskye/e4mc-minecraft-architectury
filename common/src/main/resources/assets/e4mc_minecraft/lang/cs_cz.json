@@ -1,0 +1,9 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Lokální hra hostována na doméně [%s]",
+    "text.e4mc_minecraft.closeServer": "Lokální hra již není veřejně hostována",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Lokální hra není veřejně hostována",
+    "text.e4mc_minecraft.clickToStop": " (Klikněte sem pro zastavení)",
+    "text.e4mc_minecraft.error": "V modu e4mc došlo k chybě",
+    "text.e4mc_minecraft.doctor.start": "Generování informací pro řešení problémů. Čekejte prosím.",
+    "text.e4mc_minecraft.poisonpill.badurl": "Mod e4mc byl stažen z neznámého zdroje. Tato kopie modu e4mc může být zastaralá nebo upravená."
+}
