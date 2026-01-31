@@ -19,10 +19,14 @@ public class Config extends ReflectiveConfig {
     @Comment("Whether to use whitelists on LAN worlds")
     public final TrackedValue<Boolean> useWhiteList = this.value(false);
 
+    @Comment("Whether to enable sharing LAN worlds with e4mc")
+    public final TrackedValue<Boolean> hostEnabled = this.value(true);
     @Comment("Whether to enable Dialtone peer-to-peer connections as the host")
     public final TrackedValue<Boolean> dialtoneHostEnabled = this.value(true);
     @Comment("Whether to enable Dialtone peer-to-peer connections as the player")
     public final TrackedValue<Boolean> dialtonePlayerEnabled = this.value(true);
     @Comment("The URL to get the list of Iroh relays to use")
     public final TrackedValue<String> relayMap = this.value("https://beta.e4mc.link/relaymap.json");
+    @Comment("Whether to hide direct IP addresses from ")
+    public final TrackedValue<Boolean> dialtoneSanitizeTicket = this.value(true);
 }

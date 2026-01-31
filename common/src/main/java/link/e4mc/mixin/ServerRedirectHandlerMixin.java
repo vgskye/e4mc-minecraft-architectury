@@ -60,8 +60,8 @@ public interface ServerRedirectHandlerMixin {
                                     E4mcClient.LOGGER.info("req: {}", request);
                                     var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                                     E4mcClient.LOGGER.info("resp: {}", response);
-                                    if (response.statusCode() == 200) {
-                                        ((TicketSmuggler) (Object) serverAddress).e4mc$setSmuggledTicket(response.body());
+                                    if (response.statusCode() == 200 && response.body().startsWith("v1_")) {
+                                        ((TicketSmuggler) (Object) serverAddress).e4mc$setSmuggledTicket(response.body().substring(3));
                                         return Optional.of(serverAddress);
                                     }
                                 }

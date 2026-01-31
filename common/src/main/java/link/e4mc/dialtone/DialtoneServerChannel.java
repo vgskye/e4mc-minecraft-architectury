@@ -8,6 +8,7 @@ import link.e4mc.E4mcClient;
 import link.e4mc.QuiclimeSession;
 import link.e4mc.iroh.Endpoint;
 import link.e4mc.iroh.NativeException;
+import link.e4mc.iroh.Resolvable;
 
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -46,9 +47,18 @@ public class DialtoneServerChannel extends AbstractServerChannel {
         }, "Dialtone Server Dispatcher");
         this.dispatcher.setDaemon(true);
         this.dispatcher.start();
-        endpoint.waitOnline().thenAccept(addr -> {
-            E4mcClient.LOGGER.warn("session ticket is {}", addr);
-            this.pipeline().fireUserEventTriggered(new DialtoneAddress(addr));
+        endpoint.watchAddress(new Resolvable<>() {
+            @Override
+            public void resolve(String addr) {
+                if (addr != null) {
+                    E4mcClient.LOGGER.info("session ticket is {}", addr);
+                    pipeline().fireUserEventTriggered(new DialtoneAddress(addr));
+                }
+            }
+
+            @Override
+            public void reject(Throwable throwable) {
+            }
         });
     }
 

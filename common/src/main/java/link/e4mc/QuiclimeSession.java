@@ -20,6 +20,7 @@ import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.incubator.codec.quic.*;
 import link.e4mc.dialtone.DialtoneAddress;
 import link.e4mc.dialtone.DialtoneServerChannel;
+import link.e4mc.iroh.Endpoint;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -345,8 +346,12 @@ public class QuiclimeSession {
                                                         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
                                                             super.userEventTriggered(ctx, evt);
                                                             if (evt instanceof DialtoneAddress addr) {
+                                                                var ticket = addr.actualAddress;
+                                                                if (Config.INSTANCE.dialtoneSanitizeTicket.value()) {
+                                                                    ticket = Endpoint.sanitizeTicket(ticket);
+                                                                }
                                                                 streamChannel
-                                                                        .writeAndFlush(new ControlMessageCodec.DialtoneRegisterTicketMessageServerbound(addr.actualAddress))
+                                                                        .writeAndFlush(new ControlMessageCodec.DialtoneRegisterTicketMessageServerbound("v1_" + ticket))
                                                                         .addListener(ignored -> LOGGER.info("notified server of our ticket"));
                                                             }
                                                         }

@@ -2,7 +2,7 @@ package link.e4mc.mixin;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
-import link.e4mc.DialtoneServerSession;
+import link.e4mc.Config;
 import link.e4mc.E4mcClient;
 import link.e4mc.QuiclimeSession;
 import net.minecraft.server.network.ServerConnectionListener;
@@ -36,10 +36,15 @@ public abstract class ServerConnectionListenerMixin {
 
     @Inject(method = "startTcpServerListener", at = @At(value = "TAIL"))
     private void interceptGroup(InetAddress inetAddress, int i, CallbackInfo ci) {
-        E4mcClient.session = new QuiclimeSession(e4mc$childHandler, e4mc$group);
-        e4mc$childHandler = null;
-        e4mc$group = null;
-        E4mcClient.session.startAsync();
+        if (Config.INSTANCE.hostEnabled.value()) {
+            E4mcClient.session = new QuiclimeSession(e4mc$childHandler, e4mc$group);
+            e4mc$childHandler = null;
+            e4mc$group = null;
+            E4mcClient.session.startAsync();
+        } else {
+            e4mc$childHandler = null;
+            e4mc$group = null;
+        }
     }
 
     @Inject(method = "stop", at = @At(value = "HEAD"))
