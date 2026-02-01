@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.2
+
+- Fixed Dialtone being broken for 1.18-1.20.
+
 ## 6.0.1
 
 - Fixed a crash with certain Minecraft versions.

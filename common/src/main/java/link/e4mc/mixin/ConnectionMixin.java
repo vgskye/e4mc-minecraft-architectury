@@ -50,7 +50,7 @@ public abstract class ConnectionMixin implements DialtoneConnectionExtensions {
         }
     }
 
-    @Inject(method = "connectToServer", at = @At("HEAD"), require = 0)
+    @Inject(method = "/^(connectToServer|method_10753|m_178300_)$/", at = @At("HEAD"), require = 0)
     private static void hijackStartAlt(InetSocketAddress inetSocketAddress, boolean bl, CallbackInfoReturnable<Connection> cir) {
         if (inetSocketAddress instanceof SmugglersInetSocketAddress smuggledAddress) {
             e4mc$smuggledDialtoneAddress = new DialtoneAddress(smuggledAddress.ticket);
