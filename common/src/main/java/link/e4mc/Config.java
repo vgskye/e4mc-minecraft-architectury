@@ -26,7 +26,7 @@ public class Config extends ReflectiveConfig {
     @Comment("Whether to enable Dialtone peer-to-peer connections as the player")
     public final TrackedValue<Boolean> dialtonePlayerEnabled = this.value(true);
     @Comment("The URL to get the list of Iroh relays to use")
-    public final TrackedValue<String> relayMap = this.value("https://beta.e4mc.link/relaymap.json");
-    @Comment("Whether to hide direct IP addresses from ")
+    public final TrackedValue<String> dialtoneRelayMap = this.value("https://natives.e4mc.link/relaymap.json");
+    @Comment("Whether to hide direct IP addresses from the relay")
     public final TrackedValue<Boolean> dialtoneSanitizeTicket = this.value(true);
 }

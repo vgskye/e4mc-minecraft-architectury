@@ -207,7 +207,7 @@ public class QuiclimeSession {
     public static String[] getRelayMap() throws Exception {
         var httpClient = HttpClient.newHttpClient();
         var request = HttpRequest
-                .newBuilder(new URI(Config.INSTANCE.relayMap.value()))
+                .newBuilder(new URI(Config.INSTANCE.dialtoneRelayMap.value()))
                 .header("Accept", "application/json")
                 .build();
         LOGGER.info("relaymap req: {}", request);
