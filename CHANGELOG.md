@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.1
+
+- Fixed a crash with certain Minecraft versions.
+
 ## 6.0.0
 
 - Changed mod ID to `e4mc` from `e4mc_minecraft`.
