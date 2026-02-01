@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.0
+
+- Changed mod ID to `e4mc` from `e4mc_minecraft`.
+- Introduced Dialtone! When installed on *both sides*, e4mc will now establish a direct connection.
+
 ## 5.5.4
 
 - Fixed a regression on 1.21.11 and above due to Minecraft using Netty 4.2.
