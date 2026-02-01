@@ -51,7 +51,7 @@ public class DialtoneServerChannel extends AbstractServerChannel {
             @Override
             public void resolve(String addr) {
                 if (addr != null) {
-                    E4mcClient.LOGGER.info("session ticket is {}", addr);
+                    E4mcClient.LOGGER.info("got new session ticket");
                     pipeline().fireUserEventTriggered(new DialtoneAddress(addr));
                 }
             }
