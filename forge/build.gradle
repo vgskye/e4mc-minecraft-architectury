@@ -10,7 +10,7 @@ architectury {
 
 loom {
     forge {
-        mixinConfig "e4mc_minecraft.mixins.json"
+        mixinConfig "e4mc.mixins.json"
     }
 }
 
@@ -31,7 +31,7 @@ dependencies {
     shadowCommon(implementation("io.netty.incubator:netty-incubator-codec-classes-quic:${rootProject.quic_version}") {
         exclude(group: "io.netty")
     })
-    shadowCommon('folk.sisby:kaleido-config:0.3.3+1.3.2')
+    include('folk.sisby:kaleido-config:0.3.3+1.3.2')
     shadowCommon("link.e4mc:iroh-java:1.0-SNAPSHOT")
 }
 
@@ -49,9 +49,6 @@ shadowJar {
 
     configurations = [project.configurations.shadowCommon]
     archiveClassifier = "dev-shadow"
-
-    relocate 'com.electronwill.nightconfig', 'link.e4mc.shadow.nightconfig'
-    relocate 'folk.sisby.kaleido', 'link.e4mc.shadow.kaleido'
 }
 
 remapJar {

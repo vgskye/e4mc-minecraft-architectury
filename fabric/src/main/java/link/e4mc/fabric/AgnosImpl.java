@@ -1,5 +1,6 @@
 package link.e4mc.fabric;
 
+import link.e4mc.E4mcClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -15,6 +16,6 @@ public class AgnosImpl {
     }
 
     public static Path jarPath() {
-        return FabricLoader.getInstance().getModContainer("e4mc_minecraft").get().getOrigin().getPaths().get(0);
+        return FabricLoader.getInstance().getModContainer(E4mcClient.MOD_ID).get().getOrigin().getPaths().get(0);
     }
 }

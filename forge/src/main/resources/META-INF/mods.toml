@@ -3,23 +3,24 @@ loaderVersion = "*"
 license = "MIT"
 
 [[mods]]
-modId = "e4mc_minecraft"
+modId = "e4mc"
 version = "${version}"
 displayName = "e4mc"
+logoFile = "e4mc_icon.png"
 credits = "skyevg"
 authors = "skyevg"
 description = '''
 Open a LAN server to anyone, anywhere, anytime.
 '''
 
-[[dependencies.e4mc_minecraft]]
+[[dependencies.e4mc]]
 modId = "forge"
 mandatory = true
 versionRange = "*"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.e4mc_minecraft]]
+[[dependencies.e4mc]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.18,1.21)"

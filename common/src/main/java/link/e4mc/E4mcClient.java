@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class E4mcClient {
-    public static final String MOD_ID = "e4mc_minecraft";
+    public static final String MOD_ID = "e4mc";
     public static QuiclimeSession session;
     public static final Logger LOGGER = LoggerFactory.getLogger(E4mcClient.MOD_ID);
 

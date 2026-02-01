@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "e4mc_minecraft",
+  "id": "e4mc",
   "version": "${version}",
   "name": "e4mc",
   "description": "Open a LAN server to anyone, anywhere, anytime.",
@@ -12,7 +12,7 @@
     "sources": "https://github.com/vgskye/e4mc-minecraft-architectury"
   },
   "license": "MIT",
-  "icon": "assets/e4mc_minecraft/icon.png",
+  "icon": "e4mc_icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -20,10 +20,13 @@
     ]
   },
   "mixins": [
-    "e4mc_minecraft.mixins.json"
+    "e4mc.mixins.json"
   ],
   "depends": {
     "fabric": "*",
     "minecraft": ">=1.18"
-  }
+  },
+  "provides": [
+    "e4mc_minecraft"
+  ]
 }

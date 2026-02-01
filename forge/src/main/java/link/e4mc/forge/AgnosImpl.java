@@ -1,5 +1,6 @@
 package link.e4mc.forge;
 
+import link.e4mc.E4mcClient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -16,6 +17,6 @@ public class AgnosImpl {
     }
 
     public static Path jarPath() {
-        return FMLLoader.getLoadingModList().getMods().stream().filter(modInfo -> modInfo.getModId().equals("e4mc_minecraft")).findAny().get().getOwningFile().getFile().getFilePath();
+        return FMLLoader.getLoadingModList().getMods().stream().filter(modInfo -> modInfo.getModId().equals(E4mcClient.MOD_ID)).findAny().get().getOwningFile().getFile().getFilePath();
     }
 }
