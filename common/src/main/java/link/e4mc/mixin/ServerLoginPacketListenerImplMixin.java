@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import javax.crypto.Cipher;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Arrays;
 
 @Mixin(ServerLoginPacketListenerImpl.class)
 public class ServerLoginPacketListenerImplMixin {
@@ -33,12 +35,28 @@ public class ServerLoginPacketListenerImplMixin {
         return instance.getEncoded();
     }
 
-    @Redirect(method = "handleKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/login/ServerboundKeyPacket;isChallengeValid([BLjava/security/PrivateKey;)Z"))
-    private boolean isChallengeValid(ServerboundKeyPacket instance, byte[] bs, PrivateKey privateKey) throws CryptException {
+    @Redirect(method = "handleKey", at = @At(value = "INVOKE", target = "*([BLjava/security/PrivateKey;)Z", remap = false), require = 0)
+    private boolean isChallengeValid(ServerboundKeyPacket instance, byte[] bs, PrivateKey privateKey) {
         if (connection.getRemoteAddress() instanceof DialtoneAddress) {
             return true;
         }
         return instance.isChallengeValid(bs, privateKey);
+    }
+
+    @Redirect(method = "handleKey", at = @At(value = "INVOKE", target = "Ljava/util/Arrays;equals([B[B)Z"), require = 0)
+    private boolean isNonceEqual(byte[] lhs, byte[] rhs) {
+        if (connection.getRemoteAddress() instanceof DialtoneAddress) {
+            return true;
+        }
+        return Arrays.equals(lhs, rhs);
+    }
+
+    @ModifyArg(method = "handleKey", at = @At(value = "INVOKE", target = "*(Ljava/security/PrivateKey;)[B", remap = false), index = 0, require = 0)
+    private PrivateKey patchGetNonce(PrivateKey privateKey) {
+        if (connection.getRemoteAddress() instanceof DialtoneAddress) {
+            return null;
+        }
+        return privateKey;
     }
 
     @Redirect(method = "handleKey", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/login/ServerboundKeyPacket;getSecretKey(Ljava/security/PrivateKey;)Ljavax/crypto/SecretKey;"))

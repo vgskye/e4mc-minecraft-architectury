@@ -5,9 +5,12 @@ import net.minecraft.util.Crypt;
 import net.minecraft.util.CryptException;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.security.Key;
+import java.security.PrivateKey;
 
 @Mixin(ServerboundKeyPacket.class)
 public class ServerboundKeyPacketMixin {
@@ -17,5 +20,12 @@ public class ServerboundKeyPacketMixin {
             return new byte[0];
         }
         return Crypt.encryptUsingKey(key, bs);
+    }
+
+    @Inject(method = "*(Ljava/security/PrivateKey;)[B", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+    private void patchGetNonce(PrivateKey privateKey, CallbackInfoReturnable<byte[]> callbackInfoReturnable) {
+        if (privateKey == null) {
+            callbackInfoReturnable.setReturnValue(new byte[0]);
+        }
     }
 }
