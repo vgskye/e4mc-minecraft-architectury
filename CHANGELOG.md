@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.4
+
+- Fixed an erroneous warning message. oops!
+
 ## 6.0.3
 
 - Fixed a crash with certain Minecraft versions. Again.

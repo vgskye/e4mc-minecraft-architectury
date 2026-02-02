@@ -13,7 +13,9 @@ public class PoisonPill {
                 String hidden = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 for (var line: hidden.split("\n")) {
                     if (line.startsWith("HostUrl=")) {
-                        if (!(line.startsWith("HostUrl=https://beta.e4mc.link/"))) {
+                        if (!(line.startsWith("HostUrl=https://mediafilez.forgecdn.net/")
+                                || line.startsWith("HostUrl=https://cdn.modrinth.com/")
+                                || line.startsWith("HostUrl=https://maven.is-quite.gay/"))) {
                             return false;
                         }
                     }
