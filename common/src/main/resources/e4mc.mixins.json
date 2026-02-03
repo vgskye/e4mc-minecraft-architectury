@@ -3,6 +3,7 @@
   "package": "link.e4mc.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
+  "plugin": "link.e4mc.mixin.E4mcMixinPlugin",
   "mixins": [
     "BanListCommandsMixin",
     "BanPlayerCommandsMixin",
