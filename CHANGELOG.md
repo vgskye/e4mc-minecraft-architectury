@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.5
+
+- Fixed connecting to servers not working on Forge due to a Loom bug.
+- Fixed Dialtone connections not working on Forge due to a Mixin limitation.
+
 ## 6.0.4
 
 - Fixed an erroneous warning message. oops!

@@ -20,7 +20,6 @@
     "ClientHandshakePacketListenerImplMixin",
     "PlayerListMixin",
     "ServerAddressMixin",
-    "ServerNameResolverMixin",
-    "ServerRedirectHandlerMixin"
+    "ServerNameResolverMixin"
   ]
 }
