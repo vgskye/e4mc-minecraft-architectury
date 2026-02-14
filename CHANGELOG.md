@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.6
+
+- Slightly improved mod compatibility. Should now work with the next version of ViaFabricPlus.
+
 ## 6.0.5
 
 - Fixed connecting to servers not working on Forge due to a Loom bug.

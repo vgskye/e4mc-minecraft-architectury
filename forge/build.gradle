@@ -33,6 +33,8 @@ dependencies {
     })
     include('folk.sisby:kaleido-config:0.3.3+1.3.2')
     shadowCommon("link.e4mc:iroh-java:1.0-SNAPSHOT")
+
+    implementation(include("io.github.llamalad7:mixinextras-forge:0.5.3"))
 }
 
 processResources {

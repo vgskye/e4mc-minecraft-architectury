@@ -1,5 +1,7 @@
 package link.e4mc.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import link.e4mc.DialtoneConnectionExtensions;
@@ -76,14 +78,14 @@ public abstract class ConnectionMixin implements DialtoneConnectionExtensions {
         }
     }
 
-    @Redirect(method = "/^(connect|method_52271|m_290025_|connectToServer|method_10753|m_178300_)$/", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;"))
-    private static ChannelFuture hijackConnect(Bootstrap instance, InetAddress inetHost, int inetPort) {
+    @WrapOperation(method = "/^(connect|method_52271|m_290025_|connectToServer|method_10753|m_178300_)$/", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;"))
+    private static ChannelFuture hijackConnect(Bootstrap instance, InetAddress inetHost, int inetPort, Operation<ChannelFuture> operation) {
         if (e4mc$smuggledDialtoneAddress != null) {
             var ret = instance.connect(e4mc$smuggledDialtoneAddress);
             e4mc$smuggledDialtoneAddress = null;
             return ret;
         } else {
-            return instance.connect(inetHost, inetPort);
+            return operation.call(instance, inetHost, inetPort);
         }
     }
 
