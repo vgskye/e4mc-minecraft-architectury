@@ -14,6 +14,28 @@ dependencies {
     implementation("link.e4mc:iroh-java:1.0-SNAPSHOT")
 }
 
+configurations {
+    consumable("unstubbedJar")
+}
+
+tasks.register('unstubbedJar', Jar) {
+    archiveClassifier = 'unstubbed'
+
+    from zipTree(jar.archiveFile)
+    exclude("link/e4mc/Agnos.class")
+}
+
+tasks.register('unstubbedSourcesJar', Jar) {
+    archiveClassifier = 'unstubbed-sources'
+
+    from zipTree(jar.archiveFile)
+    exclude("link/e4mc/Agnos.java")
+}
+
+artifacts {
+    add("unstubbedJar", unstubbedJar)
+}
+
 publishing {
     publications {
         mavenCommon(MavenPublication) {

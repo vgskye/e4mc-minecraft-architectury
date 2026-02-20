@@ -318,15 +318,15 @@ public class QuiclimeSession {
                                                                     .withColor(ChatFormatting.GRAY)
                                                     )
                                             );
-                                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(message));
+                                            Mirror.addMessage(message);
                                             if (E4mcClient.badurl) {
-                                                Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.poisonpill.badurl")));
+                                                Mirror.addMessage(Mirror.translatable("text.e4mc_minecraft.poisonpill.badurl"));
                                             }
                                         }
                                     }
                                     if (msg instanceof ControlMessageCodec.RequestMessageBroadcastMessageClientbound) {
                                         if (Agnos.isClient()) {
-                                            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.literal(((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message)));
+                                            Mirror.addMessage(Mirror.literal(((ControlMessageCodec.RequestMessageBroadcastMessageClientbound) msg).message));
                                         }
                                     }
                                     if (msg instanceof ControlMessageCodec.HasCapabilitiesMessageClientbound) {
@@ -400,7 +400,7 @@ public class QuiclimeSession {
         failureCause = e;
         E4mcClient.LOGGER.error("error in e4mc", e);
         if (Agnos.isClient()) {
-            Minecraft.getInstance().execute(() -> Minecraft.getInstance().gui.getChat().addMessage(Mirror.translatable("text.e4mc_minecraft.error")));
+            Mirror.addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
         }
     }
 

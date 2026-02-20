@@ -1,12 +1,11 @@
-package link.e4mc.fabric;
+package link.e4mc;
 
-import link.e4mc.E4mcClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
 
-public class AgnosImpl {
+public class Agnos {
     public static boolean isClient() {
         return FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT);
     }

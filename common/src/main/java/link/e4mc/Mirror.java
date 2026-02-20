@@ -1,5 +1,6 @@
 package link.e4mc;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -274,5 +275,20 @@ public class Mirror {
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
         }
         throw new RuntimeException("Could not locate any way to call setUsingWhitelist!");
+    }
+
+    public static void addMessage(Component message) {
+        Minecraft.getInstance().execute(() -> {
+            try {
+                Minecraft.getInstance().gui.getChat().addMessage(message);
+            } catch (NoSuchMethodError e) {
+                var chat = Minecraft.getInstance().gui.getChat();
+                try {
+                    chat.getClass().getMethod("addClientSystemMessage", Component.class).invoke(chat, message);
+                } catch (Exception ex) {
+                    E4mcClient.LOGGER.error("Failed to add message to client chat!");
+                }
+            }
+        });
     }
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.6-modern-test
+
+- Experimental version for Fabric 26.1 snapshots.
+
 ## 6.0.6
 
 - Slightly improved mod compatibility. Should now work with the next version of ViaFabricPlus.

@@ -1,6 +1,6 @@
 plugins {
     id 'com.gradleup.shadow'
-    id "me.modmuss50.mod-publish-plugin" version "0.3.0"
+    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
 }
 
 architectury {
@@ -21,7 +21,7 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "unstubbedJar")) { transitive false }
 
     shadowCommon(implementation("io.netty.incubator:netty-incubator-codec-classes-quic:${rootProject.quic_version}") {
         exclude(group: "io.netty")
@@ -52,9 +52,30 @@ remapJar {
 }
 
 sourcesJar {
-    def commonSources = project(":common").sourcesJar
+    def commonSources = project(":common").unstubbedSourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
+}
+
+tasks.register('patchFmj', Jar) {
+    archiveClassifier = 'dev-shadow-modern'
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(file("src/main/resources-modern"), zipTree(shadowJar.archiveFile))
+    dependsOn shadowJar
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.register("modernRemapJar", net.fabricmc.loom.task.RemapJarTask) {
+    injectAccessWidener = true
+    input.set patchFmj.archiveFile
+    dependsOn patchFmj
+    archiveClassifier = "modern"
+    sourceNamespace = "intermediary"
+    targetNamespace = "named"
 }
 
 components.java {
@@ -126,6 +147,24 @@ publishMods {
                 "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
                 "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6",
                 "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11"
+        )
+
+        requires {
+            slug = "fabric-api"
+        }
+
+        optional {
+            slug = "mcqoy"
+        }
+    }
+
+    modrinth("modrinthModern") {
+        accessToken = project.modrinthApiToken
+        projectId = project.modrinthId
+        file = modernRemapJar.archiveFile
+        type = ALPHA
+        minecraftVersions.addAll(
+                "26.1-snapshot-9"
         )
 
         requires {
