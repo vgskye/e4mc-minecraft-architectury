@@ -22,6 +22,14 @@ Open to LAN as normal
 
 Please contribute
 
+### Related repositories
+
+The following repositories may also be considered a part of e4mc:
+
+- [e4mc-quiclime](https://github.com/vgskye/e4mc-quiclime) is the relay-side code
+- my fork of [netty-incubator-codec-quic](https://github.com/vgskye/netty-incubator-codec-quic)
+- [iroh-java](https://github.com/vgskye/iroh-java) is used for Dialtone
+
 ## License
 
 [MIT](LICENSE)
