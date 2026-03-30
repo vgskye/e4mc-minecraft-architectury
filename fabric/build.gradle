@@ -158,13 +158,30 @@ publishMods {
         }
     }
 
+    curseforge("curseforgeModern") {
+        accessToken = project.curseforgeApiToken
+        projectId = project.curseforgeId
+        version = project.version + "-fabric-modern"
+        minecraftVersions.addAll(
+                "26.1"
+        )
+
+        requires {
+            slug = "fabric-api"
+        }
+
+        optional {
+            slug = "mcqoy"
+        }
+    }
+
     modrinth("modrinthModern") {
         accessToken = project.modrinthApiToken
         projectId = project.modrinthId
         file = modernRemapJar.archiveFile
-        type = ALPHA
+        version = project.version + "-fabric-modern"
         minecraftVersions.addAll(
-                "26.1-snapshot-9"
+                "26.1"
         )
 
         requires {

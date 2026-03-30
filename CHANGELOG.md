@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.0.6-modern-test
+## 6.1.0
 
-- Experimental version for Fabric 26.1 snapshots.
+- Support for 26.1 added. Note that Fabric requires the use of a separate modern jar for 26.1!
 
 ## 6.0.6
 
