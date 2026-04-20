@@ -163,7 +163,7 @@ publishMods {
         projectId = project.curseforgeId
         version = project.version + "-fabric-modern"
         minecraftVersions.addAll(
-                "26.1"
+                "26.1", "26.1.1", "26.1.2"
         )
 
         requires {
