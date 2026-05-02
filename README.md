@@ -18,6 +18,10 @@ e4mc is available in [Skyeven](https://maven.skye.vg) under the coordinates `lin
 
 Open to LAN as normal
 
+## Compatibility
+
+By default, e4mc will only work on Windows (x86_64), Mac (x86_64 or aarch64), or Linux (x86_64 or aarch64) hosts. This is due to only a limited selection of libraries being available for download, which the mod automatically handles. If you want to run e4mc on a host of a different OS (like \*BSD), you must build the libraries and manually load them yourself; refer to the "Related repositories" section below.
+
 ## Contributing
 
 Please contribute
@@ -33,3 +37,4 @@ The following repositories may also be considered a part of e4mc:
 ## License
 
 [MIT](LICENSE)
+
