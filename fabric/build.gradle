@@ -159,11 +159,13 @@ publishMods {
     }
 
     curseforge("curseforgeModern") {
+        displayName = "[Fabric Modern] $project.version"
         accessToken = project.curseforgeApiToken
         projectId = project.curseforgeId
+        file = modernRemapJar.archiveFile
         version = project.version + "-fabric-modern"
         minecraftVersions.addAll(
-                "26.1"
+                "26.1", "26.1.1", "26.1.2"
         )
 
         requires {
@@ -176,12 +178,13 @@ publishMods {
     }
 
     modrinth("modrinthModern") {
+        displayName = "[Fabric Modern] $project.version"
         accessToken = project.modrinthApiToken
         projectId = project.modrinthId
         file = modernRemapJar.archiveFile
         version = project.version + "-fabric-modern"
         minecraftVersions.addAll(
-                "26.1"
+                "26.1", "26.1.1", "26.1.2"
         )
 
         requires {
