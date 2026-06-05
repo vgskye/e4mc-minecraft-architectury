@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.1
+
+- Updated dependencies. Should improve performance in certain circumstances.
+
 ## 6.1.0
 
 - Support for 26.1 added. Note that Fabric requires the use of a separate modern jar for 26.1!
