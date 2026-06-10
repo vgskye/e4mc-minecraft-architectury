@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.2
+
+- Minor internal changes.
+
 ## 6.1.1
 
 - Updated dependencies. Should improve performance in certain circumstances.
