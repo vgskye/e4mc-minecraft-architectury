@@ -2,6 +2,7 @@ package link.e4mc.mixin;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
+import link.e4mc.Arch;
 import link.e4mc.Config;
 import link.e4mc.E4mcClient;
 import link.e4mc.QuiclimeSession;
@@ -37,6 +38,19 @@ public abstract class ServerConnectionListenerMixin {
     @Inject(method = "startTcpServerListener", at = @At(value = "TAIL"))
     private void interceptGroup(InetAddress inetAddress, int i, CallbackInfo ci) {
         if (Config.INSTANCE.hostEnabled.value()) {
+            // Try to load the native library for platforms like aarch64
+            Arch.tryLoadNativeLibrary();
+
+            if (!Arch.isPlatformSupported()) {
+                E4mcClient.LOGGER.warn(
+                        "Skipping e4mc session start: native QUIC library could not be loaded " +
+                        "for platform ({} {}). Run /e4mc doctor for diagnostics.",
+                        Arch.getOsName(), Arch.getOsArch()
+                );
+                e4mc$childHandler = null;
+                e4mc$group = null;
+                return;
+            }
             E4mcClient.session = new QuiclimeSession(e4mc$childHandler, e4mc$group);
             e4mc$childHandler = null;
             e4mc$group = null;

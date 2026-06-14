@@ -221,6 +221,25 @@ public class QuiclimeSession {
 
     public void start() {
         try {
+            // Pre-load the native QUIC library for non-x86_64 platforms.
+            // On x86_64 Linux, the library is already available via the CDN.
+            // On aarch64 Linux/Android, this will attempt to download and load it.
+            Arch.tryLoadNativeLibrary();
+
+            // Check platform support after native library loading attempt
+            if (!Arch.isPlatformSupported()) {
+                String message = String.format(
+                        "e4mc cannot start on this platform (%s, %s). " +
+                        "The native QUIC library (libnetty_quiche.so) could not be loaded. " +
+                        "Currently only x86_64 Linux is natively supported, and aarch64 " +
+                        "support requires the native library to be downloaded from GitHub releases. " +
+                        "Run /e4mc doctor for more details.",
+                        Arch.getOsName(), Arch.getOsArch());
+                LOGGER.error(message);
+                fail(new RuntimeException(message));
+                return;
+            }
+
             var relayInfo = getRelay();
             LOGGER.info("using relay {}", relayInfo.id);
             QuicSslContext context = QuicSslContextBuilder
@@ -400,7 +419,16 @@ public class QuiclimeSession {
         failureCause = e;
         E4mcClient.LOGGER.error("error in e4mc", e);
         if (Agnos.isClient()) {
-            Mirror.addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+            // Provide a more helpful message if the platform is unsupported
+            if (!Arch.isPlatformSupported()) {
+                Mirror.addMessage(Mirror.literal(
+                        "§c[e4mc] Not supported on this device (" + Arch.getOsArch() + "). " +
+                        "The native QUIC library is only available for x86_64 Linux. " +
+                        "Run /e4mc doctor for more details."
+                ));
+            } else {
+                Mirror.addMessage(Mirror.translatable("text.e4mc_minecraft.error"));
+            }
         }
     }
 

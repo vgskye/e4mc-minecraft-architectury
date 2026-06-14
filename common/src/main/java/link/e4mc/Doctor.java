@@ -16,6 +16,12 @@ import java.util.HexFormat;
 public class Doctor {
     public static String doctor() {
         var result = new StringBuilder();
+        result.append("platform: ");
+        result.append(Arch.getPlatformString());
+        result.append("\n");
+        result.append("architecture supported: ");
+        result.append(Arch.isPlatformSupported());
+        result.append("\n");
         result.append("mod sha512sum: ");
         try {
             var bytes = Files.readAllBytes(Agnos.jarPath());
@@ -68,6 +74,32 @@ public class Doctor {
             e.printStackTrace(new PrintStream(baos, true, StandardCharsets.UTF_8));
             result.append(baos.toString(StandardCharsets.UTF_8));
             result.append("\n");
+        }
+        result.append("native library compatibility:\n");
+        if (Arch.isPlatformSupported()) {
+            result.append("platform is supported.\n");
+        } else {
+            result.append("WARNING: Current platform (");
+            result.append(Arch.getOsName());
+            result.append(", ");
+            result.append(Arch.getOsArch());
+            result.append(") is NOT natively supported by the e4mc CDN ");
+            result.append("(which only provides x86_64 Linux builds of libnetty_quiche.so). ");
+            result.append("\n");
+            // Check if aarch64 native library could be downloaded
+            boolean isAarch64 = Arch.getOsArch().equals("aarch64") || Arch.getOsArch().equals("arm64");
+            if (isAarch64) {
+                result.append("AARCH64 DETECTED: Automatic native library download is available. ");
+                result.append("The mod will attempt to download libnetty_quiche.so from GitHub Releases. ");
+                result.append("If this fails, you can manually download the native library from ");
+                result.append("https://github.com/vgskye/e4mc-minecraft-architectury/releases ");
+                result.append("and place it in your game directory. ");
+                result.append("See the README for instructions.\n");
+            } else {
+                result.append("e4mc LAN sharing will not function on this platform. ");
+                result.append("To request support for this architecture, please open an issue at ");
+                result.append("https://github.com/vgskye/e4mc-minecraft-architectury/issues\n");
+            }
         }
         result.append("broker API test results:\n");
         QuiclimeSession.BrokerResponse brokerResponse = null;
