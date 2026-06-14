@@ -114,12 +114,18 @@ jobs:
 
       - name: Build Android aarch64 native library
         working-directory: netty-quic
-        run: ./mvnw -B -ntp --file pom.xml clean package -Dandroid -Pandroid-arm64-v8a
+        run: |
+          # First install classes-quic locally so native module can find it
+          ./mvnw -B -ntp --file pom.xml install -DskipTests -pl codec-classes-quic -am
+          # Now build the native module
+          ./mvnw -B -ntp --file pom.xml install -DskipTests -Dandroid -Pandroid-arm64-v8a -pl codec-native-quic
 
       - name: Find and copy the Android native library
         run: |
           mkdir -p native-libs
-          find netty-quic -name "libnetty_quiche.so" -path "*/arm64-v8a/*" -exec cp {} native-libs/libnetty_quiche_aarch64_android.so \;
+          # The library is at: codec-native-quic/target/native-build/arm64-v8a/native-build/target/lib/libnetty_quiche.so
+          find netty-quic -name "libnetty_quiche*.so" -path "*/arm64-v8a/*" | head -20
+          find netty-quic -name "libnetty_quiche*.so" -path "*/arm64-v8a/*" -exec cp {} native-libs/libnetty_quiche_aarch64_android.so \;
           ls -la native-libs/
 
       - name: Upload Android native library artifact
