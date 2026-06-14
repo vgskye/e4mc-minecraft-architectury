@@ -122,7 +122,9 @@ jobs:
           restore-keys: gradle-
 
       - name: Build Fabric mod
-        run: ./gradlew fabric:build --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew fabric:build --no-daemon
 
       - uses: actions/upload-artifact@v4
         with:
