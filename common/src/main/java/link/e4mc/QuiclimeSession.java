@@ -304,9 +304,13 @@ public class QuiclimeSession {
                                         String domain = ((ControlMessageCodec.DomainAssignmentCompleteMessageClientbound) msg).domain;
                                         LOGGER.info("Domain assigned: {}", domain);
                                         if (Agnos.isClient()) {
+                                            Component domainComponent = Mirror.literal(domain);
+                                            if (Config.INSTANCE.hideDomainInChat.value()) {
+                                                domainComponent = Mirror.translatable("text.e4mc_minecraft.hiddenDomain");
+                                            }
                                             Component message = Mirror.append(Mirror.translatable(
                                                     "text.e4mc_minecraft.domainAssigned",
-                                                    Mirror.withStyle(Mirror.literal(domain), it ->
+                                                    Mirror.withStyle(domainComponent, it ->
                                                     it
                                                             .withClickEvent(Mirror.copyToClipboard(domain))
                                                             .withColor(ChatFormatting.GREEN)

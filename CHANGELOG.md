@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.2.0
+
+- Added 26.2 support.
+- Added option to hide the domain in chat.
+
 ## 6.1.2
 
 - Minor internal changes.

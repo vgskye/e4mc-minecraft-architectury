@@ -5,13 +5,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import link.e4mc.DialtoneConnectionExtensions;
-import link.e4mc.E4mcClient;
 import link.e4mc.SmugglersInetSocketAddress;
 import link.e4mc.dialtone.DialtoneAddress;
 import link.e4mc.dialtone.DialtoneAmbientSession;
 import link.e4mc.dialtone.DialtoneChannel;
 import net.minecraft.network.Connection;
-import net.minecraft.util.SampleLogger;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,7 +26,6 @@ import java.net.InetSocketAddress;
 public abstract class ConnectionMixin implements DialtoneConnectionExtensions {
 
     @Shadow private Channel channel;
-    @Shadow private boolean encrypted;
     @Unique
     private static DialtoneAddress e4mc$smuggledDialtoneAddress = null;
 
@@ -89,10 +87,9 @@ public abstract class ConnectionMixin implements DialtoneConnectionExtensions {
         }
     }
 
-    @Inject(method = "setEncryptionKey", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "setEncryptionKey", at = @At(value = "FIELD", target = "Lnet/minecraft/network/Connection;channel:Lio/netty/channel/Channel;", opcode = Opcodes.GETFIELD, ordinal = 0), cancellable = true)
     private void killDoubleEncryption(Cipher cipher, Cipher cipher2, CallbackInfo ci) {
         if (channel instanceof DialtoneChannel) {
-            encrypted = true;
             ci.cancel();
         }
     }

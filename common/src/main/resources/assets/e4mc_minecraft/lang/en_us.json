@@ -5,5 +5,6 @@
     "text.e4mc_minecraft.clickToStop": " (Click here to stop)",
     "text.e4mc_minecraft.error": "An error occurred in e4mc",
     "text.e4mc_minecraft.doctor.start": "Generating troubleshooting information. Please stand by.",
-    "text.e4mc_minecraft.poisonpill.badurl": "e4mc was downloaded from an unknown source. This copy of e4mc may be outdated or modified."
+    "text.e4mc_minecraft.poisonpill.badurl": "e4mc was downloaded from an unknown source. This copy of e4mc may be outdated or modified.",
+    "text.e4mc_minecraft.hiddenDomain": "hidden, click to copy"
 }

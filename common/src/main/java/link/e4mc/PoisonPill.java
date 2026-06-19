@@ -15,6 +15,9 @@ public class PoisonPill {
                     if (line.startsWith("HostUrl=")) {
                         if (!(line.startsWith("HostUrl=https://mediafilez.forgecdn.net/")
                                 || line.startsWith("HostUrl=https://cdn.modrinth.com/")
+                                || line.startsWith("HostUrl=https://modrinth.com/")
+                                || line.startsWith("HostUrl=https://www.curseforge.com/")
+                                || line.startsWith("HostUrl=https://legacy.curseforge.com/")
                                 || line.startsWith("HostUrl=https://maven.is-quite.gay/"))) {
                             return false;
                         }
