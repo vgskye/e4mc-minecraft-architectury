@@ -1,0 +1,10 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Permainan lokal di-host pada domain [%s]",
+    "text.e4mc_minecraft.closeServer": "Permainan lokal tidak lagi di-host secara publik",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Permainan lokal tidak di-host secara publik",
+    "text.e4mc_minecraft.clickToStop": " (Klik di sini untuk berhenti)",
+    "text.e4mc_minecraft.error": "Terjadi kesalahan di e4mc",
+    "text.e4mc_minecraft.doctor.start": "Menyusun informasi troubleshooting. Harap tunggu.",
+    "text.e4mc_minecraft.poisonpill.badurl": "e4mc diunduh dari sumber yang tidak dikenal. Salinan e4mc ini mungkin sudah usang atau telah dimodifikasi.",
+    "text.e4mc_minecraft.hiddenDomain": "disembunyikan, klik untuk menyalin"
+}
