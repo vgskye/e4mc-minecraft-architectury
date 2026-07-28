@@ -3,6 +3,7 @@ package link.e4mc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -14,6 +15,7 @@ import net.minecraft.server.players.PlayerList;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -303,5 +305,26 @@ public class Mirror {
                 }
             }
         });
+    }
+
+    public static boolean hasOwnerPermission(CommandSourceStack src) {
+        try {
+            return src.hasPermission(4);
+        } catch (NoSuchMethodError ex) {
+            // 1.21.11 or later
+            try {
+                // Equivalent call is `Commands.hasPermission(Commands.LEVEL_OWNERS).test(src)`
+                Class<Commands> clazz = Commands.class;
+                Object levelOwners = clazz.getField("LEVEL_OWNERS").get(null);
+                Class<?> levelOwnersType = clazz.getField("LEVEL_OWNERS").getType();
+                Method hasPermissionMethod = clazz.getMethod("hasPermission", levelOwnersType);
+                Predicate<CommandSourceStack> hasPermission = (Predicate<CommandSourceStack>) hasPermissionMethod.invoke(null, levelOwners);
+                return hasPermission.test(src);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException unhandled) {
+                E4mcClient.LOGGER.error("Failed to check permission level!");
+                E4mcClient.LOGGER.error(unhandled.toString());
+                return false;
+            }
+        }
     }
 }
