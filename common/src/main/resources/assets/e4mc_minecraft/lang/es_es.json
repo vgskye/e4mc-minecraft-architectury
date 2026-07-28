@@ -1,7 +1,7 @@
 {
-    "text.e4mc_minecraft.domainAssigned": "Partida ahora disponible públicamente en [%s]",
-    "text.e4mc_minecraft.closeServer": "Se ha dejado de compartir públicamente tu partida",
-    "text.e4mc_minecraft.serverAlreadyClosed": "Tu partida no está siendo compartida",
-    "text.e4mc_minecraft.clickToStop": " (Click para detener)",
-    "text.e4mc_minecraft.error": "Ha ocurrido un error con e4mc"
+"text.e4mc_minecraft.domainAssigned": "Partida local alojada en el dominio [%s]",
+"text.e4mc_minecraft.closeServer": "La partida local ya no está alojada públicamente",
+"text.e4mc_minecraft.serverAlreadyClosed": "La partida local no está alojada públicamente",
+"text.e4mc_minecraft.clickToStop": " (Clic aquí para detener)",
+"text.e4mc_minecraft.error": "Ha ocurrido un error en e4mc"
 }
