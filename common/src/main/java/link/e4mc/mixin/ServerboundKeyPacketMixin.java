@@ -14,7 +14,7 @@ import java.security.PrivateKey;
 
 @Mixin(ServerboundKeyPacket.class)
 public class ServerboundKeyPacketMixin {
-    @Redirect(method = "<init>(Ljavax/crypto/SecretKey;Ljava/security/PublicKey;[B)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Crypt;encryptUsingKey(Ljava/security/Key;[B)[B"))
+    @Redirect(method = "/^<init>$/", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Crypt;encryptUsingKey(Ljava/security/Key;[B)[B"), require = 0)
     private byte[] encryptUsingKey(Key key, byte[] bs) throws CryptException {
         if (key == null) {
             return new byte[0];
