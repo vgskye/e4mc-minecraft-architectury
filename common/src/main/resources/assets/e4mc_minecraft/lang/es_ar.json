@@ -1,0 +1,7 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Partida local alojada en el dominio [%s]",
+    "text.e4mc_minecraft.closeServer": "La partida local ya no está publicada",
+    "text.e4mc_minecraft.serverAlreadyClosed": "La partida local no está publicada",
+    "text.e4mc_minecraft.clickToStop": "(Hacé clic acá para detenerla)",
+    "text.e4mc_minecraft.error": "Ocurrió un error en e4mc"
+}
