@@ -1,0 +1,9 @@
+{
+  "text.e4mc_minecraft.domainAssigned": "Локальный мир доступен по внешнему адресу [%s]",
+  "text.e4mc_minecraft.closeServer": "Локальный мир отключен от внешней сети",
+  "text.e4mc_minecraft.serverAlreadyClosed": "Локальный мир уже отключен от внешней сети",
+  "text.e4mc_minecraft.clickToStop": " (Нажмите, чтобы отключить)",
+  "text.e4mc_minecraft.error": "В e4mc произошла ошибка",
+  "text.e4mc_minecraft.doctor.start": "Собираем данные для диагностики. Пожалуйста, подождите.",
+  "text.e4mc_minecraft.poisonpill.badurl": "e4mc был скачан из неизвестного источника. Эта версия может быть устаревшей или изменённой."
+}
