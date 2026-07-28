@@ -1,6 +1,6 @@
 plugins {
     id 'com.gradleup.shadow'
-    id "me.modmuss50.mod-publish-plugin" version "1.1.0"
+    id "me.modmuss50.mod-publish-plugin" version "2.1.1"
 }
 
 architectury {
@@ -37,7 +37,7 @@ dependencies {
     }
     shadowCommon("dev.dirs:directories:${rootProject.dirs_version}")
 
-    implementation(include("io.github.llamalad7:mixinextras-forge:0.5.3"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:0.5.4"))
 }
 
 processResources {
@@ -115,7 +115,7 @@ publishMods {
         accessToken = project.curseforgeApiToken
         projectId = project.curseforgeId
         minecraftVersions.addAll(
-                "1.18", "1.18.1", "1.18.2",
+                "1.18.2",
                 "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
                 "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4"
         )
@@ -123,6 +123,9 @@ publishMods {
         optional {
             slug = "mcqoy"
         }
+
+        client = true
+        server = false
     }
 
     modrinth {
@@ -130,7 +133,7 @@ publishMods {
         projectId = project.modrinthId
         additionalFiles.from(sourcesJar.archiveFile)
         minecraftVersions.addAll(
-                "1.18", "1.18.1", "1.18.2",
+                "1.18.2",
                 "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
                 "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4"
         )

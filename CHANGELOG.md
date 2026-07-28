@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.2.1
+
+- Updated dependencies. Should improve performance in certain circumstances.
+- Fixed Dialtone issues in 1.19.
+
 ## 6.2.0
 
 - Added 26.2 support.
