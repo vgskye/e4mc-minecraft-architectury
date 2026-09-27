@@ -12,7 +12,7 @@ Open a LAN server to anyone, anywhere, anytime.
 
 ### Maven
 
-e4mc is available in [Skyeven](https://maven.skye.vg) under the coordinates `link.e4mc:e4mc_minecraft-[platform]:[version]`.
+e4mc is available in [Gayven](https://maven.is-quite.gay) under the coordinates `link.e4mc:e4mc_minecraft-[platform]:[version]`.
 
 ## Usage
 
