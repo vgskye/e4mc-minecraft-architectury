@@ -123,7 +123,7 @@ publishMods {
     modLoaders.add("quilt")
 
     version = project.version + "-fabric"
-    displayName = "[Fabric] $project.version"
+    displayName = "[Fabric -1.21.11] $project.version"
 
     // Uncomment your desired platform(s)
     curseforge {
@@ -169,14 +169,15 @@ publishMods {
     }
 
     curseforge("curseforgeModern") {
-        displayName = "[Fabric Modern] $project.version"
+        displayName = "[Fabric 26.1+] $project.version"
         accessToken = project.curseforgeApiToken
         projectId = project.curseforgeId
         file = modernRemapJar.archiveFile
         version = project.version + "-fabric-modern"
         minecraftVersions.addAll(
                 "26.1", "26.1.1", "26.1.2",
-                "26.2"
+                "26.2",
+                "26.3"
         )
 
         requires {
@@ -192,14 +193,15 @@ publishMods {
     }
 
     modrinth("modrinthModern") {
-        displayName = "[Fabric Modern] $project.version"
+        displayName = "[Fabric 26.1+] $project.version"
         accessToken = project.modrinthApiToken
         projectId = project.modrinthId
         file = modernRemapJar.archiveFile
         version = project.version + "-fabric-modern"
         minecraftVersions.addAll(
                 "26.1", "26.1.1", "26.1.2",
-                "26.2"
+                "26.2",
+                "26.3"
         )
 
         requires {

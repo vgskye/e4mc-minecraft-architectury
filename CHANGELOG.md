@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.2
+
+- Fixed an issue with native library loading on certain seemingly-broken Windows installs.
+
 ## 6.2.1
 
 - Updated dependencies. Should improve performance in certain circumstances.
