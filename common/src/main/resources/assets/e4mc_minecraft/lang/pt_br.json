@@ -1,0 +1,9 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Jogo local hospedado no domínio [%s]",
+    "text.e4mc_minecraft.closeServer": "Jogo local não está mais hospedado publicamente",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Jogo local não está hospedado publicamente",
+    "text.e4mc_minecraft.clickToStop": " (Clique aqui para parar)",
+    "text.e4mc_minecraft.error": "Ocorreu um erro no e4mc",
+    "text.e4mc_minecraft.doctor.start": "Gerando informações de solução de problemas. Por favor, aguarde.",
+    "text.e4mc_minecraft.poisonpill.badurl": "e4mc foi baixado de uma fonte desconhecida. Esta cópia do e4mc pode estar desatualizada ou modificada."
+}
