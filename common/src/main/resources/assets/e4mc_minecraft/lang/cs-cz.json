@@ -1,0 +1,7 @@
+{
+    "text.e4mc_minecraft.domainAssigned": "Místní hra je sdílena na adrese [%s]",
+    "text.e4mc_minecraft.closeServer": "Sdílení místní hry bylo zastaveno.",
+    "text.e4mc_minecraft.serverAlreadyClosed": "Sdílení nebylo aktivní.",
+    "text.e4mc_minecraft.clickToStop": " (Klikni zde pro zastavení)",
+    "text.e4mc_minecraft.error": "Nastala chyba v e4mc"
+}
