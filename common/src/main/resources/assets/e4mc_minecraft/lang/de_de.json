@@ -1,0 +1,9 @@
+{
+  "text.e4mc_minecraft.domainAssigned": "Die lokale Welt ist jetzt über diese externe Adresse erreichbar: [%s]",
+  "text.e4mc_minecraft.closeServer": "Die lokale Welt ist nicht mehr über das Internet erreichbar",
+  "text.e4mc_minecraft.serverAlreadyClosed": "Die lokale Welt ist bereits vom Internet getrennt",
+  "text.e4mc_minecraft.clickToStop": " (Zum Trennen klicken)",
+  "text.e4mc_minecraft.error": "In e4mc ist ein Fehler aufgetreten",
+  "text.e4mc_minecraft.doctor.start": "Diagnosedaten werden gesammelt. Bitte warte einen Moment.",
+  "text.e4mc_minecraft.poisonpill.badurl": "e4mc wurde aus einer unbekannten Quelle heruntergeladen. Diese Version könnte veraltet oder verändert worden sein."
+}

@@ -1,0 +1,9 @@
+{
+  "text.e4mc_minecraft.domainAssigned": "Җирле дөнья хәзер тышкы адрес аша ачыла: [%s]",
+  "text.e4mc_minecraft.closeServer": "Җирле дөнья интернет аша инде ачылмый",
+  "text.e4mc_minecraft.serverAlreadyClosed": "Җирле дөнья интернеттан инде өзелгән",
+  "text.e4mc_minecraft.clickToStop": " (Өзү өчен басыгыз)",
+  "text.e4mc_minecraft.error": "e4mc'та хата килеп чыкты",
+  "text.e4mc_minecraft.doctor.start": "Диагностика өчен мәгълүмат җыела. Зинһар, бераз көтегез.",
+  "text.e4mc_minecraft.poisonpill.badurl": "e4mc билгесез чыганактан йөкләнгән. Бу версия искергән яки үзгәртелгән булырга мөмкин."
+}
