@@ -39,6 +39,10 @@ public class DialtoneChannel extends AbstractChannel {
         return connection.exportKeyingMaterial(label, context, length);
     }
 
+    public String debugInfo() {
+        return connection.debugInfo();
+    }
+
     @Override
     protected AbstractUnsafe newUnsafe() {
         return new DialtoneUnsafe();

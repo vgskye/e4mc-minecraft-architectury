@@ -37,6 +37,14 @@ public abstract class ConnectionMixin implements DialtoneConnectionExtensions {
         return null;
     }
 
+    @Override
+    public String e4mc$connInfo() {
+        if (channel instanceof DialtoneChannel dialtoneChannel) {
+            return dialtoneChannel.debugInfo();
+        }
+        return channel.getClass().getCanonicalName();
+    }
+
     @Inject(method = "/^(connect|method_52271|m_290025_)$/", at = @At("HEAD"), require = 0)
     private static void hijackStart(InetSocketAddress inetSocketAddress, @Coerce Object obj, Connection connection, CallbackInfoReturnable<ChannelFuture> cir) {
         if (inetSocketAddress instanceof SmugglersInetSocketAddress smuggledAddress) {

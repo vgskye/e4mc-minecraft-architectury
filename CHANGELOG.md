@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.2.3
+
+- Updated dependencies.
+- Added a diagnostics command for getting detailed connection information for Dialtone.
+
 ## 6.2.2
 
 - Fixed an issue with native library loading on certain seemingly-broken Windows installs.

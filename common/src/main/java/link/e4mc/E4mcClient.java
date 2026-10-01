@@ -2,8 +2,10 @@ package link.e4mc;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import link.e4mc.mixin.ServerCommonPacketListenerImplAccessor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.commands.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +81,12 @@ public class E4mcClient {
                             }
                             return 1;
                         }))
+                        .then(Commands.literal("conninfo").then(Commands.argument("player", EntityArgument.player()).executes(ctx -> {
+                            var diag = ((DialtoneConnectionExtensions) ((ServerCommonPacketListenerImplAccessor) EntityArgument.getPlayer(ctx, "player").connection).getConnection()).e4mc$connInfo();
+                            LOGGER.info("e4mc connection information report:\n{}", diag);
+                            Mirror.sendSuccessToSource(ctx.getSource(), Mirror.literal(diag));
+                            return 1;
+                        })))
         );
     }
 }
